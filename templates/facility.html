@@ -52,18 +52,20 @@
     .container {
       margin: 20px auto;
       padding: 20px;
+      padding-top: 60px; /* Added space for top buttons */
       background-color: white;
       border-radius: 8px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       position: relative;
       line-height: 2.7;
-      height:740px;
+      min-height: 740px; /* Changed from fixed height to min-height */
+      overflow: visible; /* Ensure content can expand */
     }
 
     .top-buttons {
       position: absolute;
-      top: 10px;
-      right: 10px;
+      top: 15px; /* Increased from 10px */
+      right: 15px; /* Increased from 10px */
       display: flex;
       gap: 20px;
       z-index: 1;
@@ -85,6 +87,20 @@
       color: #0056b3;
     }
 
+    .container h1 {
+      margin-top: 0; /* Remove default top margin */
+      margin-bottom: 20px;
+    }
+
+    .container hr {
+      margin: 20px 0;
+    }
+
+    .container p {
+      margin-bottom: 20px;
+      text-align: justify;
+    }
+
     .footer {
       background-color: #002147;
       color: white;
@@ -93,11 +109,42 @@
       text-align: center;
       margin-top: 20px;
     }
+
+    /* Responsive design for smaller screens */
+    @media (max-width: 768px) {
+      .main {
+        padding: 20px;
+      }
+      
+      .logo-container {
+        flex-direction: column;
+        gap: 10px;
+      }
+      
+      .left-logo, .right-logo {
+        width: 80px;
+      }
+      
+      .header h1 {
+        font-size: 18px;
+      }
+      
+      .top-buttons {
+        position: relative;
+        top: 0;
+        right: 0;
+        justify-content: center;
+        margin-bottom: 20px;
+      }
+      
+      .container {
+        padding-top: 20px;
+      }
+    }
   </style>
 </head>
 <body>
   <div class="main">
-
     <!-- Header Section -->
     <div class="header">
       <div class="logo-container">
@@ -113,18 +160,19 @@
 
     <!-- Main Content -->
     <div class="container">
-     <div class="top-buttons">
+      <div class="top-buttons">
         <a href="{{ url_for('home') }}" title="Home"><i class="fas fa-home"></i></a>
         <a href="{{ url_for('about') }}" title="About"><i class="fas fa-info-circle"></i></a>
-        <a href="{{ url_for('facility') }}" title="Facility"><i class="fas fa-microscope"></i></a>
+        <a href="{{ url_for('facility') }}" title="Instruction"><i class="fas fa-sticky-note"></i></a>
+        <a href="{{ url_for('equipments') }}" title="Equipments"><i class="fas fa-microscope"></i></a>
         <a href="{{ url_for('team') }}" title="Team"><i class="fas fa-users"></i></a>
-        <a href="{{ url_for('equipments') }}" title="Equipments"><i class="fas fa-tools"></i></a>
       </div>
       
-<br>
+      <h1>Instructions</h1>
+      <hr>
       <p>
         Any academic or industrial researchers and scientists who want to use the ADVANCED CENTER FOR CRYO-ELECTRON MICROSCOPY FACILITY at IISc for high-resolution data collection should directly contact the EM manager 
-        <b>(cryoem.iisc@gmail.com)</b> or (<a href="mailto:somnath@iisc.ac.in">somnath@iisc.ac.in</a>).
+        <strong>(cryoem.iisc@gmail.com)</strong> or (<a href="mailto:somnath@iisc.ac.in">somnath@iisc.ac.in</a>).
         A nominal charge will be applicable for cryo-EM grid preparation & microscope usage.
         Users must provide sample details and preliminary purification or biochemical data to access the microscope. If not provided, no assurance will be given about grid/data quality.
       </p>
@@ -138,10 +186,15 @@
 
       <p>
         Users publishing work based on data collected at our facility should acknowledge the facility personnel and include the following funding acknowledgement:
-        <br><br>
-        <i>“The data was collected at the ADVANCED CENTER FOR CRYO-ELECTRON MICROSCOPY FACILITY FOR BIOLOGICAL SCIENCES AT IISc, Bengaluru, India funded by Department of Biotechnology (DBT) Infrastructure Grant, Govt of India and DST-FIST.”</i>
-        <br><br>
+        <br>
+        <em>"The data was collected at the ADVANCED CENTER FOR CRYO-ELECTRON MICROSCOPY FACILITY FOR BIOLOGICAL SCIENCES AT IISc, Bengaluru, India funded by Department of Biotechnology (DBT) Infrastructure Grant, Govt of India and DST-FIST."</em>
+      <br>
         This applies even if the data collection is conducted elsewhere after screening at IISc. (<a href="mailto:somnath@iisc.ac.in">somnath@iisc.ac.in</a>)
+      </p>
+      
+      <p style="font-weight: bold;">
+        Industrial samples will receive preferential consideration.<br>
+        For safety and handling considerations, the first and last grid positions of the cassette will be left unoccupied.
       </p>
     </div>
 
@@ -149,7 +202,6 @@
     <div class="footer">
       <p>&copy; 2025 Advanced Centre for Cryo Electron Microscopy</p>
     </div>
-
   </div>
 </body>
 </html>

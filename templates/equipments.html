@@ -154,10 +154,12 @@
       <div class="top-buttons">
         <a href="{{ url_for('home') }}" title="Home"><i class="fas fa-home"></i></a>
         <a href="{{ url_for('about') }}" title="About"><i class="fas fa-info-circle"></i></a>
-        <a href="{{ url_for('facility') }}" title="Facility"><i class="fas fa-microscope"></i></a>
+        <a href="{{ url_for('facility') }}" title="Instruction"><i class="fas fa-sticky-note"></i></a>
+        <a href="{{ url_for('equipments') }}" title="Equipments"><i class="fas fa-microscope"></i></a>
         <a href="{{ url_for('team') }}" title="Team"><i class="fas fa-users"></i></a>
-        <a href="{{ url_for('equipments') }}" title="Equipments"><i class="fas fa-tools"></i></a>
       </div>
+      <h1>Equipments</h1>
+            <hr>
 
       <div style="margin-top: 50px;">
 
@@ -170,7 +172,7 @@
             </div>
           </div>
           <div class="equipment-description">
-            <p>Used for high-resolution cryo-EM imaging. Enables near-atomic structure determination of macromolecular complexes.</p>
+            <p>The Thermo Scientific Talos Arctica is a 200kV Cryo-TEM optimized for high-resolution imaging of biological macromolecules. It supports single-particle analysis and cryo-electron tomography, with an autoloader for automated grid handling. Equipped with the Gatan K2 Summit direct electron detector, it enables high-contrast, low-noise data acquisition. Housed at ACCEM, IISc, the system offers robust and reliable cryo-EM capabilities for academic and industrial users.</p>
           </div>
         </div>
 
@@ -182,7 +184,7 @@
             </div>
           </div>
           <div class="equipment-description">
-            <p>Used for hydrophilizing EM grids by glow discharging. Ensures sample adherence and spreading.</p>
+            <p>Our facility is equipped with the PELCO easiGlow™, a compact glow discharge system essential for preparing high-quality cryo-EM grids. It renders carbon films hydrophilic or hydrophobic using selectable polarity, with precise vacuum and plasma control. The user-friendly touchscreen and programmable settings ensure fast, consistent, and reproducible surface treatment. Ideal for high-throughput and contamination-free grid preparation at ACCEM, IISc.</p>
           </div>
         </div>
 
@@ -190,11 +192,11 @@
           <div class="equipment-left">
             <img src="{{ url_for('static', filename='images/direct_detector.png') }}" alt="Direct Detector (K2)">
             <div class="equipment-title">
-              <h3>Direct Detector (K2) - High-Speed Electron Detector</h3>
+              <h3>Direct Electron Detector (Gatan K2 Summit) </h3>
             </div>
           </div>
           <div class="equipment-description">
-            <p>Captures electron images with high frame rate and low noise for improved data quality in cryo-EM.</p>
+            <p>Our cryo‑EM setup features the Gatan K2 Summit, a 4k × 4k direct electron detector that captures individual electrons with unparalleled clarity using electron counting and super‑resolution modes. Operating at up to 400 fps, it delivers exceptional detective quantum efficiency (DQE), high signal-to-noise and sharp low-frequency contrast for superior cryo‑EM and tomography data. With automated dose-fractionated movie acquisition and seamless integration with DigitalMicrograph, it ensures high-throughput, high-resolution imaging in our Talos Arctica 200 kV Cryo‑TEM</p>
           </div>
         </div>
 
@@ -202,11 +204,11 @@
           <div class="equipment-left">
             <img src="{{ url_for('static', filename='images/fei_vitrobot.png') }}" alt="FEI Vitrobot">
             <div class="equipment-title">
-              <h3>FEI Vitrobot - Automated Plunge Freezer</h3>
+              <h3>FEI Vitrobot - Semi-Automated Plunge Freezer</h3>
             </div>
           </div>
           <div class="equipment-description">
-            <p>Rapidly vitrifies samples on EM grids to preserve native structures for imaging at cryogenic temperatures.</p>
+            <p>The Thermo Scientific Vitrobot Mark IV is a semi-automated plunge freezer designed to vitrify biological samples under controlled temperature and humidity. It features a climate-controlled chamber, programmable blotting parameters, and a user-friendly touchscreen interface. With reproducible grid preparation and minimized contamination, it is essential for high-quality cryo-EM and cryo-ET workflows. This system is a core part of the sample preparation suite at ACCEM, IISc.</p>
           </div>
         </div>
 
@@ -214,13 +216,39 @@
           <div class="equipment-left">
             <img src="{{ url_for('static', filename='images/cryo-em_workstation.png') }}" alt="Cryo-EM Workstation">
             <div class="equipment-title">
-              <h3>Cryo-EM Workstation - Data Processing Suite</h3>
+              <h3>Quorum Q150T ES Plus</h3>
             </div>
           </div>
           <div class="equipment-description">
-            <p>Handles advanced image processing workflows and storage for high-throughput cryo-EM analysis.</p>
+            <p>The Quorum Q150T ES Plus is a dual-function sputter and carbon coater equipped with a turbomolecular pump for high-vacuum coating. It supports fine-grain metal sputtering and high-purity carbon evaporation, ideal for TEM and SEM grid preparation. With a touchscreen interface, programmable recipes, and quick-switch heads, it ensures fast, reproducible coatings. This system enhances sample quality and imaging performance at ACCEM, IISc.</p>
           </div>
         </div>
+
+        <div class="equipment">
+          <div class="equipment-left">
+            <img src="{{ url_for('static', filename='images/server.jpg') }}" alt="Cryo-EM Workstation">
+            <div class="equipment-title">
+              <h3>Cluster & high-throughput Data Processing Servers</h3>
+            </div>
+          </div>
+          <div class="equipment-description">
+            <p>ACCEM offers high-performance CPU and GPU-based workstations and compute clusters tailored for cryo-EM data processing. With large memory, high-speed storage, and powerful graphics capabilities, the systems support all leading-edge cryo-EM processing software. These resources enable fast, scalable workflows for 2D/3D reconstruction and high-resolution structure determination. Designed for reliability and speed, they empower researchers to handle large datasets with ease.</p>
+          </div>
+        </div>
+
+        <div class="equipment">
+          <div class="equipment-left">
+            <img src="{{ url_for('static', filename='images/sample.jpg') }}" alt="Cryo-EM Workstation">
+            <div class="equipment-title">
+              <h3>Sample preparation Infrastructure</h3>
+            </div>
+          </div>
+          <div class="equipment-description">
+            <p>ACCEM hosts a comprehensive suite for cryo-EM sample preparation, including clipping stations, autogrid loading tools, and cryogenic handling infrastructure. Controlled-environment enclosures ensure safe grid assembly under low-temperature conditions. Dedicated liquid nitrogen infrastructures and cryo-storage systems preserve sample quality throughout preparation and transfer.</p>
+          </div>
+        </div>
+
+        
 
       </div>
     </div>

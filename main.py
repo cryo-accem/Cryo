@@ -16,14 +16,14 @@ app.config['PERMANENT_SESSION_LIFETIME'] = datetime.timedelta(minutes=30)
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 465
 app.config['MAIL_USE_SSL'] = True
-app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME', 'your_email@gmail.com') # Replace with your email
-app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD', 'your_app_password') # Replace with your app password
-app.config['MAIL_DEFAULT_SENDER'] = os.environ.get('MAIL_DEFAULT_SENDER', 'your_email@gmail.com') # Replace with your email
+app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME')
+app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')
+app.config['MAIL_DEFAULT_SENDER'] = os.environ.get('MAIL_DEFAULT_SENDER')
 mail = Mail(app)
 
 # --- MongoDB Connection Setup ---
 # For production, set this as an environment variable
-MONGO_URI = os.environ.get('MONGO_URI', 'mongodb+srv://cryoemiisc:GZWpObsk1L7vIydQ@allregesterdata.eygquiu.mongodb.net/cryo_em_db?retryWrites=true&w=majority&appName=ALLREGESTERDATA')
+MONGO_URI = os.environ.get('MONGO_URI')
 client = MongoClient(MONGO_URI)
 db = client.cryo_em_db
 
@@ -78,7 +78,7 @@ def team():
 def facility():
     return render_template('facility.html')
 
-# --- THIS ROUTE IS NOW ACTIVE ---
+# --- NEW ROUTE ---
 @app.route('/equipments')
 def equipments():
     return render_template('equipments.html')
@@ -143,6 +143,7 @@ def admin():
         admin_user = users_collection.find_one({'username': username})
         
         if admin_user and check_password_hash(admin_user['password'], password):
+            # --- UPDATED SESSION LOGIC ---
             session.permanent = True
             session['admin_logged_in'] = True
             return redirect(url_for('admin_panel'))
@@ -241,7 +242,6 @@ def admin_logout():
 def check_admin_session():
     """Logs out admin if they navigate away from admin pages."""
     if 'admin_logged_in' in session and request.endpoint:
-        # Define allowed endpoints for a logged-in admin
         allowed_endpoints = [
             'admin_panel', 'admin_logout', 'load_registration',
             'complete_registration', 'delete_registration', 'static'
@@ -250,4 +250,5 @@ def check_admin_session():
             session.pop('admin_logged_in', None)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # For local development
+    app.run(debug=True, host='0.0.0.0', port=5000)
