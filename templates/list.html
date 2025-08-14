@@ -206,10 +206,11 @@
             <table>
                 <thead>
                     <tr>
-                        <th style="width: 15%">Position</th>
-                        <th style="width: 25%">Name of User</th>
-                        <th style="width: 25%">Name of PI</th>
-                        <th style="width: 35%">Registration Date</th>
+                        <th style="width: 10%">Position</th>
+                        <th style="width: 20%">Name of User</th>
+                        <th style="width: 20%">Name of PI</th>
+                        <th style="width: 20%">Origin</th>
+                        <th style="width: 30%">Registration Date</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -218,6 +219,7 @@
                         <td>{{ loop.index }}</td>
                         <td>{{ slot.user_name }}</td>
                         <td>{{ slot.pi_name }}</td>
+                        <td>{{ slot.origin }}</td>
                         <td>{{ slot.registration_date }}</td>
                     </tr>
                     {% endfor %}
