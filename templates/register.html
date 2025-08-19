@@ -195,9 +195,10 @@
             <div class="form-group">
                 <label for="origin">Origin of the User</label>
                 <select id="origin" name="origin" required onchange="toggleEsmField()">
-                    <option value="">Select origin</option>
-                    <option value="internal">Internal User</option>
-                    <option value="external">External User</option>
+                        <option value="">Select origin</option>
+                        <option value="Internal">Internal User</option>
+                        <option value="External">External User</option>
+                        <option value="Industry">Industry User</option>
                 </select>
             </div>
 
@@ -235,15 +236,15 @@
 
 <script>
     function toggleEsmField() {
-        const origin = document.getElementById('origin').value;
-        const esmField = document.getElementById('esm_field');
-        if (origin === 'external') {
-            esmField.classList.remove('hidden');
-            document.getElementById('esm').required = true;
-        } else {
-            esmField.classList.add('hidden');
-            document.getElementById('esm').required = false;
-        }
+            const origin = document.getElementById('origin').value;
+            const esmField = document.getElementById('esm_field');
+            if (origin === 'External' || origin === 'Industry') {
+                esmField.classList.remove('hidden');
+                document.getElementById('esm').required = true;
+            } else {
+                esmField.classList.add('hidden');
+                document.getElementById('esm').required = false;
+            }
     }
 </script>
 </body>
