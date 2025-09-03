@@ -99,7 +99,18 @@ def register():
             "registration_date": datetime.datetime.now().strftime('%Y-%m-%d'),
             "status": "waiting"
         }
+        # Check if user_name already exists in waiting list
+        existing_user = registrations_collection.find_one({
+            "user_name": new_registration["user_name"],
+            "status": "waiting"
+        })
+
+        if existing_user:
+            flash(f"User '{new_registration['user_name']}' is already in the waiting list. Please use a different name or contact support.")
+            return redirect(url_for('register'))
+
         registrations_collection.insert_one(new_registration)
+
         
         position = registrations_collection.count_documents({'status': 'waiting'})
         
