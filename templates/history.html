@@ -144,7 +144,7 @@
         <a href="{{ url_for('team') }}" title="Team"><i class="fas fa-users"></i></a>
       </div>
         <div class="section">
-            {% if history_entries %}
+            {% if history_entries or completed_imaging %}
             <table>
                 <thead>
                     <tr>
@@ -154,10 +154,12 @@
                         <th>Sample Name</th>
                         <th>Registration Date</th>
                         <th>Completion Date</th>
+                        <th>Type</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for entry in history_entries %}
+                    {# support both public history_entries and admin completed_imaging #}
+                    {% for entry in (completed_imaging if completed_imaging is defined else history_entries) %}
                     <tr>
                         <td>{{ loop.index }}</td>
                         <td>{{ entry.user_name }}</td>
@@ -165,12 +167,40 @@
                         <td>{{ entry.sample_name }}</td>
                         <td>{{ entry.registration_date }}</td>
                         <td>{{ entry.completion_date }}</td>
+                        <td>{{ entry.reg_type if entry.reg_type else 'imaging' }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
             {% else %}
             <div class="empty-message">No completed slots in history.</div>
+            {% endif %}
+            {% if completed_freezing is defined and completed_freezing %}
+            <h2>Completed Freezing</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Position</th>
+                        <th>User Name</th>
+                        <th>PI Name</th>
+                        <th>Sample Name</th>
+                        <th>Freezing Date</th>
+                        <th>Completed At</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for slot in completed_freezing %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ slot.user_name }}</td>
+                        <td>{{ slot.pi_name }}</td>
+                        <td>{{ slot.sample_name }}</td>
+                        <td>{{ slot.freezing_date }}</td>
+                        <td>{{ slot.completed_at }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
             {% endif %}
         </div>
     </div>

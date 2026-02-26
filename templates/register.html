@@ -208,18 +208,43 @@
             </div>
 
             <div class="form-group">
+                <label for="reg_type">Slot Type</label>
+                <select id="reg_type" name="reg_type" required onchange="toggleTypeFields()">
+                    <option value="">Select slot type</option>
+                    <option value="imaging">Imaging</option>
+                    <option value="freezing">Freezing</option>
+                    <option value="screening">Screening</option>
+                </select>
+            </div>
+
+            <div class="form-group">
                 <label for="sample_name">Name of the Sample</label>
                 <input type="text" id="sample_name" name="sample_name" required>
             </div>
 
-            <div class="form-group">
+            <div class="form-group" id="imaging_fields">
                 <label for="grids">How Many Grids (Maximum 4)</label>
                 <input type="number" id="grids" name="grids" min="1" max="4" required>
             </div>
 
-            <div class="form-group">
+            <div class="form-group" id="days_field">
                 <label for="days">How Many Days Required (Maximum 4)</label>
                 <input type="number" id="days" name="days" min="1" max="4" required>
+            </div>
+
+            <div class="form-group hidden" id="freezing_fields">
+                <label for="grids_freezing">How Many Grids (Maximum 8)</label>
+                <input type="number" id="grids_freezing" name="grids_freezing" min="1" max="8">
+            </div>
+
+            <div class="form-group hidden" id="freezing_date_field">
+                <label for="freezing_date">Freezing Date</label>
+                <input type="date" id="freezing_date" name="freezing_date">
+            </div>
+
+            <div class="form-group hidden" id="screening_fields">
+                <label for="grids_screening">How Many Grids (Maximum 4)</label>
+                <input type="number" id="grids_screening" name="grids_screening" min="1" max="4">
             </div>
 
             <div class="button-group">
@@ -245,6 +270,47 @@
                 esmField.classList.add('hidden');
                 document.getElementById('esm').required = false;
             }
+    }
+
+    function toggleTypeFields() {
+        const type = document.getElementById('reg_type').value;
+        const imaging = document.getElementById('imaging_fields');
+        const days = document.getElementById('days_field');
+        const freezing = document.getElementById('freezing_fields');
+        const freezingDate = document.getElementById('freezing_date_field');
+        const screening = document.getElementById('screening_fields');
+
+        // hide all by default
+        imaging.classList.add('hidden');
+        days.classList.add('hidden');
+        freezing.classList.add('hidden');
+        freezingDate.classList.add('hidden');
+        screening.classList.add('hidden');
+
+        if (type === 'imaging') {
+            imaging.classList.remove('hidden');
+            days.classList.remove('hidden');
+            document.getElementById('grids').required = true;
+            document.getElementById('days').required = true;
+        } else {
+            document.getElementById('grids').required = false;
+            document.getElementById('days').required = false;
+        }
+        if (type === 'freezing') {
+            freezing.classList.remove('hidden');
+            freezingDate.classList.remove('hidden');
+            document.getElementById('grids_freezing').required = true;
+            document.getElementById('freezing_date').required = true;
+        } else {
+            document.getElementById('grids_freezing').required = false;
+            document.getElementById('freezing_date').required = false;
+        }
+        if (type === 'screening') {
+            screening.classList.remove('hidden');
+            document.getElementById('grids_screening').required = true;
+        } else {
+            document.getElementById('grids_screening').required = false;
+        }
     }
 </script>
 </body>
