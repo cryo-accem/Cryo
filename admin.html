@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <title>Admin Login</title>
+    <style>
+         body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #e9ecf1;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        .main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 50px;
+        }
+        .header {
+            background-color: #002147;
+            color: white;
+            padding: 20px;
+            border-radius: 20px 20px 0 0;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 5px 0;
+            font-size: 22px;
+        }
+        .logo-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .left-logo, .right-logo {
+            width: 100px;
+            height: auto;
+        }
+        .title {
+            text-align: center;
+            flex-grow: 1;
+        }
+        .container {
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            height: 400px;
+        }
+        .top-buttons {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 20px;
+            z-index: 1;
+        }
+        .top-buttons a {
+            color: black;
+            text-decoration: none;
+            font-size: 24px;
+        }
+
+        .top-buttons a i {
+            padding: 5px;
+            transition: transform 0.2s ease, color 0.2s ease;
+        }
+
+        .top-buttons a:hover i {
+            transform: scale(1.2);
+            color: #0056b3;
+        }
+        
+        h2 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-left:13.0vh ;
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            width: 250px;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        .form-group input,
+        .form-group select {
+            flex: 1;
+            max-width: 400px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .form-group-button {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        button {
+            background-color: #0056b3;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100px;
+        }
+        button:hover {
+            background-color: #003d7a;
+        }
+        .footer {
+            background-color: #002147;
+            color: white;
+            padding: 20px;
+            border-radius: 0 0 20px 20px;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            color: #721c24;
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="main">
+    <div class="header">
+        <div class="logo-container">
+            <img src="{{ url_for('static', filename='images/iisc_logo.png') }}" alt="Institute Logo" class="left-logo">
+            <div class="title">
+                <h1>ADVANCED CENTRE</h1>
+                <h1>FOR</h1>
+                <h1>CRYO ELECTRON MICROSCOPY</h1>
+            </div>
+             <img src="{{ url_for('static', filename='images/cryo.png') }}" alt="Cryo-EM Logo" class="right-logo">
+        </div>
+    </div>
+    
+    <div class="container">
+       <div class="top-buttons">
+        <a href="{{ url_for('home') }}" title="Home"><i class="fas fa-home"></i></a>
+        <a href="{{ url_for('about') }}" title="About"><i class="fas fa-info-circle"></i></a>
+        <a href="{{ url_for('facility') }}" title="Instruction"><i class="fas fa-sticky-note"></i></a>
+<a href="{{ url_for('equipments') }}" title="Equipments"><i class="fas fa-microscope"></i></a>
+        <a href="{{ url_for('publications') }}" title="Publications"><i class="fas fa-newspaper"></i></a>
+                <a href="{{ url_for('team') }}" title="Team"><i class="fas fa-users"></i></a>
+        
+      </div>
+        <h2>Admin Login</h2>
+        
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        <form action="{{ url_for('admin') }}" method="post">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+
+            <div class="form-group-button">
+                <button type="submit">Login</button>
+            </div>
+        </form>
+    </div>
+    
+    <div class="footer">
+        <p>&copy; 2025 Advanced Centre for Cryo Electron Microscopy</p>
+    </div>
+</div>    
+</body>
+</html>

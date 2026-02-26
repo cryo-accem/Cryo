@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <title>Publications | Cryo-EM Centre</title>
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background-color: #e9ecf1;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    .main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 50px;
+    }
+
+    .header {
+      background-color: #002147;
+      color: white;
+      padding: 20px;
+      border-radius: 20px 20px 0 0;
+      text-align: center;
+    }
+
+    .logo-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .left-logo, .right-logo {
+      width: 100px;
+      height: auto;
+    }
+
+    .title {
+      text-align: center;
+      flex-grow: 1;
+    }
+
+    .header h1 {
+      margin: 5px 0;
+      font-size: 22px;
+    }
+
+    .container {
+      margin: 20px auto;
+      padding: 20px;
+      padding-top: 60px;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      position: relative;
+      line-height: 2;
+      min-height: 740px;
+      overflow: visible;
+    }
+
+    .top-buttons {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      display: flex;
+      gap: 20px;
+      z-index: 1;
+    }
+
+    .top-buttons a {
+      color: black;
+      text-decoration: none;
+      font-size: 24px;
+    }
+
+    .top-buttons a i {
+      padding: 5px;
+      transition: transform 0.2s ease, color 0.2s ease;
+    }
+
+    .top-buttons a:hover i {
+      transform: scale(1.2);
+      color: #0056b3;
+    }
+
+    .container h1 {
+      margin-top: 0;
+      margin-bottom: 20px;
+    }
+
+    .container hr {
+      margin: 20px 0;
+    }
+
+    .publications-list {
+      text-align: justify;
+      font-size: 15px;
+    }
+
+    .publications-list p {
+      margin-bottom: 15px;
+    }
+
+    .footer {
+      background-color: #002147;
+      color: white;
+      padding: 20px;
+      border-radius: 0 0 20px 20px;
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .main { padding: 20px; }
+      .logo-container { flex-direction: column; gap: 10px; }
+      .left-logo, .right-logo { width: 80px; }
+      .header h1 { font-size: 18px; }
+      .top-buttons { position: relative; justify-content: center; margin-bottom: 20px; }
+      .container { padding-top: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="main">
+    <div class="header">
+      <div class="logo-container">
+        <img src="{{ url_for('static', filename='images/iisc_logo.png') }}" alt="Institute Logo" class="left-logo">
+        <div class="title">
+          <h1>ADVANCED CENTRE</h1>
+          <h1>FOR</h1>
+          <h1>CRYO ELECTRON MICROSCOPY</h1>
+        </div>
+        <img src="{{ url_for('static', filename='images/cryo.png') }}" alt="Cryo-EM Logo" class="right-logo">
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="top-buttons">
+        <a href="{{ url_for('home') }}" title="Home"><i class="fas fa-home"></i></a>
+        <a href="{{ url_for('about') }}" title="About"><i class="fas fa-info-circle"></i></a>
+        <a href="{{ url_for('facility') }}" title="Instruction"><i class="fas fa-sticky-note"></i></a>
+<a href="{{ url_for('equipments') }}" title="Equipments"><i class="fas fa-microscope"></i></a>
+        <a href="{{ url_for('publications') }}" title="Publications"><i class="fas fa-newspaper"></i></a>
+                <a href="{{ url_for('team') }}" title="Team"><i class="fas fa-users"></i></a>
+      </div>
+
+      <h1>Publications</h1>
+      <hr>
+      <div class="publications-list">
+  <p>1. Chatterjee, A., Roy, A., Satheesh, T. et al. Structural insights into pre-pore intermediates of alpha-hemolysin in the lipidic environment. <em>Nat Commun</em> 16, 6348 (2025). <a href="https://doi.org/10.1038/s41467-025-61741-x">https://doi.org/10.1038/s41467-025-61741-x</a></p>
+
+  <p>2. Chatterjee, A., Naskar, P., Mishra, S., & Dutta, S. (2025). Pore Formation by Pore Forming Proteins in Lipid Membranes: Structural Insights Through Cryo-EM. <em>The Journal of Membrane Biology</em>. <a href="https://doi.org/10.1007/s00232-025-00344-5">https://doi.org/10.1007/s00232-025-00344-5</a></p>
+
+  <p>3. Datey, A., Sharma, P., Khaja, F. T., Rahil, H., & Hussain, T. (2025). Yeast Eukaryotic Initiation Factor 4B Remodels the MRNA Entry Site on the Small Ribosomal Subunit. <em>Biochemistry</em>, 64(3), 600–608. <a href="https://doi.org/10.1021/acs.biochem.4c00489">https://doi.org/10.1021/acs.biochem.4c00489</a></p>
+
+  <p>4. Rencilin CF, Chatterjee A, Ansari MY, Deshpande S, Mukherjee S, Singh R, Jayatheertha SB, Reddy PM, Hingankar N, Varadarajan R, Bhattacharya J, Dutta S. (2025). Cryo-EM reveals conformational variability in the SARS-CoV-2 spike protein RBD induced by two broadly neutralizing monoclonal antibodies. <em>RSC Adv</em>. <a href="https://doi.org/10.1039/d5ra00373c">https://doi.org/10.1039/d5ra00373c</a></p>
+
+  <p>5. Nandi S, Chakrabarty S, Bandopadhyay P, Mandal D, Azaharuddin M, Das A, Pal A, Ghosh S, Nandy S, Sett U, Basu T. (2025). Molecular mechanism of action of tetracycline-loaded calcium phosphate nanoparticle to kill multi-drug resistant bacteria. <em>Biochim Biophys Acta Gen Subj</em>. <a href="https://doi.org/10.1016/j.bbagen.2024.130733">https://doi.org/10.1016/j.bbagen.2024.130733</a></p>
+
+  <p>6. Das, D., & Hussain, T. (2025). Structural insights into the recruitment of viral Type 2 IRES to ribosomal preinitiation complex for protein synthesis. <em>Cold Spring Harbor Laboratory</em>. <a href="https://doi.org/10.1101/2025.05.28.656627">https://doi.org/10.1101/2025.05.28.656627</a></p>
+
+  <p>7. Padmanabhan, S., Biswas, R., Rencilin, C. F., & Dutta, S. (2025). Cryo-EM reveals the structural heterogeneity and conformational flexibility of multidrug efflux pumps MdtB and MdtF. <em>Cold Spring Harbor Laboratory</em>. <a href="https://doi.org/10.1101/2025.04.25.650598">https://doi.org/10.1101/2025.04.25.650598</a></p>
+
+  <p>8. Hussain, N., Apotikar, A., Pidathala, S., Mukherjee, S., Burada, A. P., Sikdar, S. K., Vinothkumar, K. R., & Penmatsa, A. (2024). Cryo-EM structures of pannexin 1 and 3 reveal differences among pannexin isoforms. <em>Nature Communications</em>, 15(1), 2942. <a href="https://doi.org/10.1038/s41467-024-47142-6">https://doi.org/10.1038/s41467-024-47142-6</a></p>
+
+  <p>9. Shukla, A. K., Banerjee, M., Singh, A. K., Penmatsa, A., Dutta, S., Anand, R., Sirajuddin, M., & Srivastava, S. S. (2024). Cryo-EM research in India. <em>Structure (London, England : 1993)</em>, 32(2), 113–119. <a href="https://doi.org/10.1016/j.str.2024.01.002">https://doi.org/10.1016/j.str.2024.01.002</a></p>
+
+  <p>10. Gautam S, Mahapa A, Yeramala L, Gandhi A, Krishnan S, Kutti R. V, et al. Regulatory mechanisms of c-di-AMP synthase from Mycobacterium smegmatis revealed by a structure: Function analysis. <em>Protein Science</em>. <a href="https://doi.org/10.1002/pro.4568">https://doi.org/10.1002/pro.4568</a></p>
+
+  <p>11. Nayak, S. R., Joseph, D., Höfner, G., Dakua, A., Athreya, A., Wanner, K. T., Kanner, B. I., & Penmatsa, A. (2023). Cryo-EM structure of GABA transporter 1 reveals substrate recognition and transport mechanism. <em>Nature Structural & Molecular Biology</em>, 30(7), 1023–1032. <a href="https://doi.org/10.1038/s41594-023-01011-w">https://doi.org/10.1038/s41594-023-01011-w</a></p>
+
+  <p>12. Uday, A. B., Mishra, R. K., & Hussain, T. (2023). Initiation factor 3 bound to the 30S ribosomal subunit in an initial step of translation. <em>Proteins</em>, 93(1), 279–286. <a href="https://doi.org/10.1002/prot.26655">https://doi.org/10.1002/prot.26655</a></p>
+
+  <p>13. Majumder, P., Ahmed, S., Ahuja, P., Athreya, A., Ranjan, R., & Penmatsa, A. (2023). Cryo-EM structure of antibacterial efflux transporter QacA from Staphylococcus aureus reveals a novel extracellular loop with allosteric role. <em>The EMBO Journal</em>, 42(16), e113418. <a href="https://doi.org/10.15252/embj.2023113418">https://doi.org/10.15252/embj.2023113418</a></p>
+
+  <p>14. Suman Mishra, Anupam Roy, Somnath Dutta. Cryo-EM-based structural insights into supramolecular assemblies of γ-hemolysin from S. aureus reveal the pore formation mechanism. <em>Structure</em>, 31(6), 651–667.e5 (2023). <a href="https://doi.org/10.1016/j.str.2023.03.009">https://doi.org/10.1016/j.str.2023.03.009</a></p>
+
+  <p>15. Nayanika Sengupta, Surekha Padmanaban, Somnath Dutta. Cryo-EM reveals the membrane-binding phenomenon of EspB, a virulence factor of the mycobacterial type VII secretion system. <em>Journal of Biological Chemistry</em>, 299(4), 104589 (2023). <a href="https://doi.org/10.1016/j.jbc.2023.104589">https://doi.org/10.1016/j.jbc.2023.104589</a></p>
+
+  <p>16. Mishra S, Kundu N, Pramanick I, Kumar A, Chattopadhyay K, Dutta S. Structural insights into thermostable direct hemolysin of Vibrio parahaemolyticus using single-particle cryo-EM. <em>Proteins</em>, 91(2):137–146 (2023). <a href="https://doi.org/10.1002/prot.26416">https://doi.org/10.1002/prot.26416</a></p>
+
+  <p>17. Mondal, A. K., Sengupta, N., Singh, M., Biswas, R., Lata, K., Lahiri, I., Dutta, S., & Chattopadhyay, K. (2022). Glu289 residue in the pore-forming motif of Vibrio cholerae cytolysin is important for efficient β-barrel pore formation. <em>The Journal of Biological Chemistry</em>, 298(10), 102441. <a href="https://doi.org/10.1016/j.jbc.2022.102441">https://doi.org/10.1016/j.jbc.2022.102441</a></p>
+
+  <p>18. Khatri, B., Pramanick, I., Malladi, S.K. et al. A dimeric proteomimetic prevents SARS-CoV-2 infection by dimerizing the spike protein. <em>Nat Chem Biol</em> 18, 1046–1055 (2022). <a href="https://doi.org/10.1038/s41589-022-01060-0">https://doi.org/10.1038/s41589-022-01060-0</a></p>
+
+  <p>19. Bandyopadhyay, P., Pramanick, I., Biswas, R., Ps, S., Sreedharan, S., Singh, S., Rajmani, R. S., Laxman, S., Dutta, S., & Singh, A. (2022). S-Adenosylmethionine-responsive cystathionine β-synthase modulates sulfur metabolism and redox balance in Mycobacterium tuberculosis. <em>Science Advances</em>, 8(25), eabo0097. <a href="https://doi.org/10.1126/sciadv.abo0097">https://doi.org/10.1126/sciadv.abo0097</a></p>
+
+  <p>20. Sengupta, N., Mondal, A. K., Mishra, S., Chattopadhyay, K., & Dutta, S. (2021). Single-particle cryo-EM reveals conformational variability of the oligomeric VCC β-barrel pore in a lipid bilayer. <em>Journal of Cell Biology</em>, 220(12), e202102035.</p>
+
+  <p>21. Pramanick, I., Sengupta, N., Mishra, S., Pandey, S., Girish, N., Das, A., & Dutta, S. (2021). Conformational flexibility and structural variability of SARS-CoV2 S protein. <em>Structure</em>, 29(8):834–845.e5. <a href="https://doi.org/10.1016/j.str.2021.04.006">https://doi.org/10.1016/j.str.2021.04.006</a></p>
+
+  <p>22. Kumar A, P S, Gulati S, Dutta S. (2021). User-friendly, High-throughput, and Fully Automated Data Acquisition Software for Single-particle Cryo-electron Microscopy. <em>J Vis Exp</em>. <a href="https://doi.org/10.3791/62832">https://doi.org/10.3791/62832</a></p>
+
+  <p>23. Kumar A, Sengupta N, Dutta S. Simplified Approach for Preparing Graphene Oxide TEM Grids for Stained and Vitrified Biomolecules. <em>Nanomaterials (Basel)</em>. <a href="https://doi.org/10.3390/nano11030643">https://doi.org/10.3390/nano11030643</a></p>
+
+  <p>24. Malladi SK, Singh R, Pandey S, Gayathri S, Kanjo K, Ahmed S, Khan MS, Kalita P, Girish N, Upadhyaya A, Reddy P, Pramanick I, Bhasin M, Mani S, Bhattacharyya S, Joseph J, Thankamani K, Raj VS, Dutta S, Singh R, Nadig G, Varadarajan R. Design of a highly thermotolerant, immunogenic SARS-CoV-2 spike fragment. <em>J Biol Chem</em>. <a href="https://doi.org/10.1074/jbc.RA120.016284">https://doi.org/10.1074/jbc.RA120.016284</a></p>
+
+  <p>25. Kundu N, Verma P, Kumar A, Dhar V, Dutta S, Chattopadhyay K. N-Terminal Region of Vibrio parahemolyticus Thermostable Direct Hemolysin Regulates the Membrane-Damaging Action of the Toxin. <em>Biochemistry</em>. <a href="https://doi.org/10.1021/acs.biochem.9b00937">https://doi.org/10.1021/acs.biochem.9b00937</a></p>
+
+  <p>26. Mondal AK, Verma P, Sengupta N, Dutta S, Bhushan Pandit S, Chattopadhyay K. Tyrosine in the hinge region of the pore-forming motif regulates oligomeric β-barrel pore formation by Vibrio cholerae cytolysin. <em>Mol Microbiol</em>. <a href="https://doi.org/10.1111/mmi.14631">https://doi.org/10.1111/mmi.14631</a></p>
+
+  <p>27. Malladia SK, Schreiberb D, Pramanicka I, Sridevia MA, Goldenzweigb A, Dutta S, Fleishman SJ, Varadarajan R. One-step sequence and structure-guided optimization of HIV-1 envelope gp140. <em>Current Research in Structural Biology</em>. <a href="https://doi.org/10.1016/j.crstbi.2020.04.001">https://doi.org/10.1016/j.crstbi.2020.04.001</a></p>
+
+  <p>28. Ghosh E, Dwivedi H, Baidya M, Srivastava A, Kumari P, Stepniewski T, Kim HR, Lee MH, van Gastel J, Chaturvedi M, Roy D, Pandey S, Maharana J, Guixà-González R, Luttrell LM, Chung KY, Dutta S, Selent J, Shukla AK. Conformational Sensors and Domain Swapping Reveal Structural and Functional Differences between β-Arrestin Isoforms. <em>Cell Rep</em>. <a href="https://doi.org/10.1016/j.celrep.2019.08.053">https://doi.org/10.1016/j.celrep.2019.08.053</a></p>
+
+  <p>29. Datta M, Aroli S, Karmakar K, Dutta S, Chakravortty D, Varshney U. Development of mCherry tagged UdgX as a highly sensitive molecular probe for specific detection of uracils in DNA. <em>Biochem Biophys Res Commun</em>. <a href="https://doi.org/10.1016/j.bbrc.2019.08.005">https://doi.org/10.1016/j.bbrc.2019.08.005</a></p>
+
+  <p>30. Koehl A, Hu H, Feng D, Sun B, Zhang Y, Robertson MJ, Chu M, Kobilka TS, Laermans T, Steyaert J, Tarrasch J, Dutta S, Fonseca R, Weis WI, Mathiesen JM, Skiniotis G, Kobilka BK. Structural insights into the activation of metabotropic glutamate receptors. <em>Nature</em>. <a href="https://doi.org/10.1038/s41586-019-0907-1">https://doi.org/10.1038/s41586-019-0907-1</a></p>
+
+  <p>31. Bhandari S, Biswas S, Chaudhary A, Dutta S, Suguna K. Dodecameric structure of a small heat shock protein from Mycobacterium marinum M. <em>Proteins</em>. <a href="https://doi.org/10.1002/prot.25657">https://doi.org/10.1002/prot.25657</a></p>
+
+  <p>32. Kumar S, Panda H, Makhdoomi MA, Mishra N, Safdari HA, Chawla H, Aggarwal H, Reddy ES, Lodha R, Kumar Kabra S, Chandele A, Dutta S, Luthra K. An HIV-1 broadly neutralizing antibody from a clade C infected pediatric elite neutralizer potently neutralizes the contemporaneous and autologous evolving viruses. <em>J Virol</em>. <a href="https://doi.org/10.1128/JVI.01495-18">https://doi.org/10.1128/JVI.01495-18</a></p>
+
+  <p>33. Safdari, HA, Pandey, S, Shukla, AK, Dutta, S. (2018). Illuminating GPCR Signaling by Cryo-EM. <em>Trends Cell Biol</em>, 28, 591–594.</p>
+
+  <p>34. Kesavardhana S, Das R, Datta CM, Ecto R, Srilatha L, DiStefano NS, Swoyer RD, Joyce JG, Dutta S et al. Structure-based Design of Cyclically Permuted HIV-1 gp120 Trimers That Elicit Neutralizing Antibodies. <em>J Biol Chem</em>, 292, 278–291 (2017).</p>
+
+  <p>35.	Safdari, HA, Pandey, S, Shukla, AK, Dutta, S. (2018) Illuminating GPCR Signaling by Cryo-EM. Trends Cell Biol, 28, 591-594. (Corresponding Author)
+</p>
+<p>36.	Kesavardhana S, Das R, Datta CM, Ecto R, Srilatha L, DiStefano NS, Swoyer RD, Joyce JG, Dutta S et al. Structure-based Design of Cyclically Permuted HIV-1 gp120 Trimers That Elicit Neutralizing Antibodies. J Biol Chem, 2017, 292, 278-291.</p>
+</div>
+
+
+    </div>
+
+    <div class="footer">
+      <p>&copy; 2025 Advanced Centre for Cryo Electron Microscopy</p>
+    </div>
+  </div>
+</body>
+</html>

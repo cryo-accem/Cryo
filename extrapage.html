@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACCEM-home</title>
+    
+  <style>
+    body {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #e9ecf1;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        .main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding:  50px;
+        }
+        .header {
+            background-color: #002147;
+            color: white;
+            padding: 20px;
+            border-radius: 20px 20px 0 0;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 5px 0;
+            font-size: 22px;
+        }
+         .title {
+            flex-grow: 1;
+            text-align: center;
+        }
+.footer {
+            background-color: #002147;
+            color: white;
+            padding: 20px;
+            border-radius: 0 0 20px 20px;
+            text-align: center;
+            margin-top: 20px;
+        }
+  </style> 
+</head>
+<body>
+<div class="main">
+    <div class="title">
+                    <h1>ADVANCED CENTRE</h1>
+                    <h1>FOR</h1>
+                    <h1>CRYO ELECTRON MICROSCOPY</h1>
+                </div>
+        
+      
+
+<div class="container">   
+
+    <div class="content"  style="line-height: 1.3;">
+        <br>
+        
+            <div class="button">
+                <a href="{{ url_for('home') }}">
+                    <button id="enterBtn">
+                        Enter  <i class="fas fa-sign-in-alt"></i> 
+                    </button>
+                </a>
+            </div>      
+        <br>
+
+            <img src="{{ url_for('static', filename='images/iisc_logo.png') }}" alt="iisc_logo" >
+
+            <br><br>
+                
+                Developed and maintained by<br>
+
+                <b style="font-size: 23px;"> Dr. Somnath Dutta's Lab</b><br>   
+        
+                Laboratory for Advanced Center For Cryo-Electron Microscopy Facility<br>
+    
+                Department of Molecular Biophysics Unit<br>
+    
+                Indian Institute of Science<br>
+    
+                Bangalore - 560 012<br>
+    
+                India.
+                   
+            
+            
+    </div>
+        
+</div>    
+
+        
+        <div class="footer">
+        <p>&copy; 2025 Advanced Centre for Cryo Electron Microscopy</p>
+    </div>
+
+</div>
+    
+
+</body>
+
+</html>

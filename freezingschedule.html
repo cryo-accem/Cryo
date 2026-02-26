@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <title>Freezing Schedule</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #e9ecf1;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .main {
+            width: 1200px;
+            margin: 20px 0;
+            padding: 0;
+            position: relative;
+        }
+        .header {
+            width: 100%;
+            background-color: #002147;
+            color: white;
+            padding: 20px;
+            border-radius: 20px 20px 0 0;
+            text-align: center;
+            box-sizing: border-box;
+        }
+        .header h1 {
+            margin: 5px 0;
+            font-size: 22px;
+        }
+        .logo-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .left-logo, .right-logo {
+            width: 100px;
+            height: auto;
+        }
+        .title {
+            text-align: center;
+            flex-grow: 1;
+            padding: 0 20px;
+        }
+        .container {
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            min-height: 740px;
+            box-sizing: border-box;
+            width: 100%;
+        }
+        .top-buttons {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 20px;
+            z-index: 1;
+        }
+        .top-buttons a {
+            color: black;
+            text-decoration: none;
+            font-size: 24px;
+        }
+        .top-buttons a i {
+            padding: 5px;
+            transition: transform 0.2s ease, color 0.2s ease;
+        }
+        .top-buttons a:hover i {
+            transform: scale(1.2);
+            color: #0056b3;
+        }
+        h2 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 40px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #002147;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .footer {
+            width: 100%;
+            background-color: #002147;
+            color: white;
+            padding: 20px;
+            border-radius: 0 0 20px 20px;
+            text-align: center;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+<div class="main">
+    <div class="header">
+        <div class="logo-container">
+            <img src="{{ url_for('static', filename='images/iisc_logo.png') }}" alt="Institute Logo" class="left-logo">
+            <div class="title">
+                <h1>ADVANCED CENTRE</h1>
+                <h1>FOR</h1>
+                <h1>CRYO ELECTRON MICROSCOPY</h1>
+            </div>
+            <img src="{{ url_for('static', filename='images/cryo.png') }}" alt="Cryo-EM Logo" class="right-logo">
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="top-buttons">
+            <a href="{{ url_for('home') }}" title="Home"><i class="fas fa-home"></i></a>
+            <a href="{{ url_for('about') }}" title="About"><i class="fas fa-info-circle"></i></a>
+            <a href="{{ url_for('facility') }}" title="Instruction"><i class="fas fa-sticky-note"></i></a>
+    <a href="{{ url_for('equipments') }}" title="Equipments"><i class="fas fa-microscope"></i></a>
+        <a href="{{ url_for('publications') }}" title="Publications"><i class="fas fa-newspaper"></i></a>
+                    <a href="{{ url_for('team') }}" title="Team"><i class="fas fa-users"></i></a>
+        </div>
+
+        <h2>Active Freezing Schedule</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Position</th>
+                    <th>Name of User</th>
+                    <th>Name of PI</th>
+                    <th>Origin</th>
+                    <th>Registration Date</th>
+                    <th>Number of Grids</th>
+                    <th>Date for Freezing</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if active_slots %}
+                    {% for slot in active_slots %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ slot.user_name }}</td>
+                            <td>{{ slot.pi_name }}</td>
+                            <td>{{ slot.origin }}</td>
+                            <td>{{ slot.registered_at.strftime('%Y-%m-%d') if slot.registered_at else '' }}</td>
+                            <td>{{ slot.grids }}</td>
+                            <td>{{ slot.freezing_date }}</td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr><td colspan="7">No active freezing slots available.</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2025 Advanced Centre for Cryo Electron Microscopy</p>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <title>Equipments - Cryo-EM Centre</title>
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background-color: #e9ecf1;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    .main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 50px;
+    }
+
+    .header {
+      background-color: #002147;
+      color: white;
+      padding: 20px;
+      border-radius: 20px 20px 0 0;
+      text-align: center;
+    }
+
+    .logo-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .left-logo, .right-logo {
+      width: 100px;
+      height: auto;
+    }
+
+    .title {
+      text-align: center;
+      flex-grow: 1;
+    }
+
+    .header h1 {
+      margin: 5px 0;
+      font-size: 22px;
+    }
+
+    .container {
+      margin: 20px auto;
+      padding: 20px;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      position: relative;
+      line-height: 2.2;
+    }
+
+    .top-buttons {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      display: flex;
+      gap: 20px;
+      z-index: 1;
+    }
+
+    .top-buttons a {
+      color: black;
+      text-decoration: none;
+      font-size: 24px;
+    }
+
+    .top-buttons a i {
+      padding: 5px;
+      transition: transform 0.2s ease, color 0.2s ease;
+    }
+
+    .top-buttons a:hover i {
+      transform: scale(1.2);
+      color: #0056b3;
+    }
+
+    .equipment {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+
+    .equipment-left {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 200px;
+    }
+
+    .equipment-left img {
+      width: 100%;
+      border-radius: 8px;
+    }
+
+    .equipment-title h3 {
+      margin-top: 8px;
+      font-size: 14px;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .equipment-description {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      padding-left: 40px;
+    }
+
+    .equipment-description p {
+      margin: 0;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    .footer {
+      background-color: #002147;
+      color: white;
+      padding: 20px;
+      border-radius: 0 0 20px 20px;
+      text-align: center;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="main">
+
+    <!-- Header Section -->
+    <div class="header">
+      <div class="logo-container">
+        <img src="{{ url_for('static', filename='images/iisc_logo.png') }}" alt="Institute Logo" class="left-logo">
+        <div class="title">
+          <h1>ADVANCED CENTRE</h1>
+          <h1>FOR</h1>
+          <h1>CRYO ELECTRON MICROSCOPY</h1>
+        </div>
+        <img src="{{ url_for('static', filename='images/cryo.png') }}" alt="Cryo-EM Logo" class="right-logo">
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+      <div class="top-buttons">
+        <a href="{{ url_for('home') }}" title="Home"><i class="fas fa-home"></i></a>
+        <a href="{{ url_for('about') }}" title="About"><i class="fas fa-info-circle"></i></a>
+        <a href="{{ url_for('facility') }}" title="Instruction"><i class="fas fa-sticky-note"></i></a>
+<a href="{{ url_for('equipments') }}" title="Equipments"><i class="fas fa-microscope"></i></a>
+        <a href="{{ url_for('publications') }}" title="Publications"><i class="fas fa-newspaper"></i></a>
+                <a href="{{ url_for('team') }}" title="Team"><i class="fas fa-users"></i></a>
+      </div>
+      <h1>Equipments</h1>
+            <hr>
+
+      <div style="margin-top: 50px;">
+
+        <!-- Equipment Blocks -->
+        <div class="equipment">
+          <div class="equipment-left">
+            <img src="{{ url_for('static', filename='images/talos_arctica.png') }}" alt="Talos Arctica">
+            <div class="equipment-title">
+              <h3>Talos Arctica - 200kV Cryo-TEM</h3>
+            </div>
+          </div>
+          <div class="equipment-description">
+            <p>The Thermo Scientific Talos Arctica is a 200kV Cryo-TEM optimized for high-resolution imaging of biological macromolecules. It supports single-particle analysis and cryo-electron tomography, with an autoloader for automated grid handling. Equipped with the Gatan K2 Summit direct electron detector, it enables high-contrast, low-noise data acquisition. Housed at ACCEM, IISc, the system offers robust and reliable cryo-EM capabilities for academic and industrial users.</p>
+          </div>
+        </div>
+
+        <div class="equipment">
+          <div class="equipment-left">
+            <img src="{{ url_for('static', filename='images/pelco_easiGlow.png') }}" alt="PELCO easiGlow">
+            <div class="equipment-title">
+              <h3>PELCO easiGlow - Glow Discharge System</h3>
+            </div>
+          </div>
+          <div class="equipment-description">
+            <p>Our facility is equipped with the PELCO easiGlow™, a compact glow discharge system essential for preparing high-quality cryo-EM grids. It renders carbon films hydrophilic or hydrophobic using selectable polarity, with precise vacuum and plasma control. The user-friendly touchscreen and programmable settings ensure fast, consistent, and reproducible surface treatment. Ideal for high-throughput and contamination-free grid preparation at ACCEM, IISc.</p>
+          </div>
+        </div>
+
+        <div class="equipment">
+          <div class="equipment-left">
+            <img src="{{ url_for('static', filename='images/direct_detector.png') }}" alt="Direct Detector (K2)">
+            <div class="equipment-title">
+              <h3>Direct Electron Detector (Gatan K2 Summit) </h3>
+            </div>
+          </div>
+          <div class="equipment-description">
+            <p>Our cryo‑EM setup features the Gatan K2 Summit, a 4k × 4k direct electron detector that captures individual electrons with unparalleled clarity using electron counting and super‑resolution modes. Operating at up to 400 fps, it delivers exceptional detective quantum efficiency (DQE), high signal-to-noise and sharp low-frequency contrast for superior cryo‑EM and tomography data. With automated dose-fractionated movie acquisition and seamless integration with DigitalMicrograph, it ensures high-throughput, high-resolution imaging in our Talos Arctica 200 kV Cryo‑TEM</p>
+          </div>
+        </div>
+
+        <div class="equipment">
+          <div class="equipment-left">
+            <img src="{{ url_for('static', filename='images/fei_vitrobot.png') }}" alt="FEI Vitrobot">
+            <div class="equipment-title">
+              <h3>FEI Vitrobot - Semi-Automated Plunge Freezer</h3>
+            </div>
+          </div>
+          <div class="equipment-description">
+            <p>The Thermo Scientific Vitrobot Mark IV is a semi-automated plunge freezer designed to vitrify biological samples under controlled temperature and humidity. It features a climate-controlled chamber, programmable blotting parameters, and a user-friendly touchscreen interface. With reproducible grid preparation and minimized contamination, it is essential for high-quality cryo-EM and cryo-ET workflows. This system is a core part of the sample preparation suite at ACCEM, IISc.</p>
+          </div>
+        </div>
+
+        <div class="equipment">
+          <div class="equipment-left">
+            <img src="{{ url_for('static', filename='images/cryo-em_workstation.png') }}" alt="Cryo-EM Workstation">
+            <div class="equipment-title">
+              <h3>Quorum Q150T ES Plus</h3>
+            </div>
+          </div>
+          <div class="equipment-description">
+            <p>The Quorum Q150T ES Plus is a dual-function sputter and carbon coater equipped with a turbomolecular pump for high-vacuum coating. It supports fine-grain metal sputtering and high-purity carbon evaporation, ideal for TEM and SEM grid preparation. With a touchscreen interface, programmable recipes, and quick-switch heads, it ensures fast, reproducible coatings. This system enhances sample quality and imaging performance at ACCEM, IISc.</p>
+          </div>
+        </div>
+
+        <div class="equipment">
+          <div class="equipment-left">
+            <img src="{{ url_for('static', filename='images/server.jpg') }}" alt="Cryo-EM Workstation">
+            <div class="equipment-title">
+              <h3>Cluster & high-throughput Data Processing Servers</h3>
+            </div>
+          </div>
+          <div class="equipment-description">
+            <p>ACCEM offers high-performance CPU and GPU-based workstations and compute clusters tailored for cryo-EM data processing. With large memory, high-speed storage, and powerful graphics capabilities, the systems support all leading-edge cryo-EM processing software. These resources enable fast, scalable workflows for 2D/3D reconstruction and high-resolution structure determination. Designed for reliability and speed, they empower researchers to handle large datasets with ease.</p>
+          </div>
+        </div>
+
+        <div class="equipment">
+          <div class="equipment-left">
+            <img src="{{ url_for('static', filename='images/sample.jpg') }}" alt="Cryo-EM Workstation">
+            <div class="equipment-title">
+              <h3>Sample preparation Infrastructure</h3>
+            </div>
+          </div>
+          <div class="equipment-description">
+            <p>ACCEM hosts a comprehensive suite for cryo-EM sample preparation, including clipping stations, autogrid loading tools, and cryogenic handling infrastructure. Controlled-environment enclosures ensure safe grid assembly under low-temperature conditions. Dedicated liquid nitrogen infrastructures and cryo-storage systems preserve sample quality throughout preparation and transfer.</p>
+          </div>
+        </div>
+
+        
+
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <p>&copy; 2025 Advanced Centre for Cryo Electron Microscopy</p>
+    </div>
+
+  </div>
+</body>
+</html>
