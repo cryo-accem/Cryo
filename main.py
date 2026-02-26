@@ -32,6 +32,15 @@ registrations_collection = db.registrations
 history_collection = db.history
 users_collection = db.users
 
+# additional collections needed for freezing workflow
+freezing_bookings_collection = db.freezing_bookings
+completed_freezing_collection = db.completed_freezing
+
+# ensure useful indexes
+registrations_collection.create_index([('email', 1), ('status', 1), ('reg_type', 1)])
+# only one active freezing booking per email
+freezing_bookings_collection.create_index('email', unique=True, partialFilterExpression={'status': 'active'})
+
 # --- Helper Functions ---
 def get_slideshow_images():
     """Gets a list of image filenames from the static/slideshow directory."""
@@ -83,54 +92,138 @@ def facility():
 def equipments():
     return render_template('equipments.html')
 
+@app.route('/publication')
+def publications():
+    return render_template('pub.html')
+
 # --- Data-Driven Routes ---
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        new_registration = {
-            "user_name": request.form['user_name'],
-            "pi_name": request.form['pi_name'],
-            "email": request.form['email'],
-            "origin": request.form['origin'],
-            "esm": 'iisc' if request.form['origin'] == 'internal' else request.form['esm'],
-            "sample_name": request.form['sample_name'],
-            "grids": request.form['grids'],
-            "days": request.form['days'],
-            "registration_date": datetime.datetime.now().strftime('%Y-%m-%d'),
-            "status": "waiting"
-        }
-        # Check if user_name already exists in waiting list
-        existing_user = registrations_collection.find_one({
-            "user_name": new_registration["user_name"],
-            "status": "waiting"
-        })
+        reg_type = request.form.get('reg_type')
+        user_name = request.form['user_name']
+        pi_name = request.form['pi_name']
+        email = request.form['email']
+        origin = request.form.get('origin', '')
+        esm = request.form.get('esm', '')
+        sample_name = request.form['sample_name']
 
-        if existing_user:
-            flash(f"User '{new_registration['user_name']}' is already in the waiting list. Please use a different name or contact support.")
-            return redirect(url_for('register'))
+        # ---------- IMAGING ----------
+        if reg_type == 'imaging':
+            grids = int(request.form.get('grids') or 0)
+            days = int(request.form.get('days') or 0)
 
-        registrations_collection.insert_one(new_registration)
+            existing = registrations_collection.find_one({
+                'email': email,
+                'status': {'$in': ['waiting', 'ongoing']},
+                'reg_type': 'imaging'
+            })
+            if existing:
+                flash('This email is already registered for an Imaging slot.')
+                return redirect(url_for('register'))
 
-        
-        position = registrations_collection.count_documents({'status': 'waiting'})
-        
-        subject = "Cryo-EM Slot Registration Confirmation"
-        body = f"""
-Dear {new_registration['user_name']},
+            doc = {
+                'reg_type': 'imaging',
+                'user_name': user_name,
+                'pi_name': pi_name,
+                'email': email,
+                'origin': origin,
+                'esm': esm,
+                'sample_name': sample_name,
+                'grids': grids,
+                'days': days,
+                'registration_date': datetime.datetime.now().strftime('%Y-%m-%d'),
+                'status': 'waiting'
+            }
+            registrations_collection.insert_one(doc)
 
-Thank you for registering with us.
-Your slot is registered and your current waiting position is {position}.
-We will let you know once it's loaded....
+            position = registrations_collection.count_documents({'status': 'waiting', 'reg_type': 'imaging'})
+            subject = 'Cryo-EM Imaging Slot Registered'
+            body = f"""
+Dear {user_name},
 
-Thanks for your support and cooperation.
+Your Imaging slot has been registered.
+PI: {pi_name}
+Sample: {sample_name}
+Grids: {grids}
+Days: {days}
 
-Thanks & Regards,
-Cryo-EM Team,
-IISc Bangalore.
-"""
-        send_email(new_registration['email'], subject, body)
-        
-        return redirect(url_for('list_view'))
+Cryo-EM Team"""
+            send_email(email, subject, body)
+            return redirect(url_for('list_view'))
+
+        # ---------- FREEZING ----------
+        elif reg_type == 'freezing':
+            grids = int(request.form.get('grids_freezing') or 0)
+            freezing_date = request.form.get('freezing_date')
+
+            existing = freezing_bookings_collection.find_one({
+                'email': email,
+                'status': 'active'
+            })
+            if existing:
+                flash('This email is already registered in Freezing Schedule.')
+                return redirect(url_for('register'))
+
+            total = freezing_bookings_collection.aggregate([
+                {'$match': {'freezing_date': freezing_date, 'status': 'active'}},
+                {'$group': {'_id': None, 'total': {'$sum': '$grids'}}}
+            ])
+            total_grids = 0
+            for r in total:
+                total_grids = r.get('total', 0)
+            if total_grids + grids > 8:
+                flash(f"Grid limit exceeded. Only {8 - total_grids} grids left for this date.")
+                return redirect(url_for('register'))
+
+            freezing_bookings_collection.insert_one({
+                'user_name': user_name,
+                'pi_name': pi_name,
+                'email': email,
+                'origin': origin,
+                'sample_name': sample_name,
+                'grids': grids,
+                'freezing_date': freezing_date,
+                'status': 'active',
+                'registered_at': datetime.datetime.now()
+            })
+
+            send_email(email, 'Cryo-EM Freezing Slot Registered',
+                       f"Dear {user_name},\n\nYour Freezing slot has been registered.\nPI: {pi_name}\nSample: {sample_name}\nGrids: {grids}\nDate: {freezing_date}\n\nCryo-EM Team")
+            return redirect(url_for('freezing_schedule'))
+
+        # ---------- SCREENING ----------
+        elif reg_type == 'screening':
+            grids = int(request.form.get('grids_screening') or 0)
+
+            existing = registrations_collection.find_one({
+                'email': email,
+                'status': {'$in': ['waiting', 'ongoing']},
+                'reg_type': 'screening'
+            })
+            if existing:
+                flash('This email is already registered for a Screening slot.')
+                return redirect(url_for('register'))
+
+            doc = {
+                'reg_type': 'screening',
+                'user_name': user_name,
+                'pi_name': pi_name,
+                'email': email,
+                'origin': origin,
+                'esm': esm,
+                'sample_name': sample_name,
+                'grids': grids,
+                'days': 0,
+                'registration_date': datetime.datetime.now().strftime('%Y-%m-%d'),
+                'status': 'waiting'
+            }
+            registrations_collection.insert_one(doc)
+
+            send_email(email, 'Cryo-EM Screening Slot Registered',
+                       f"Dear {user_name},\n\nYour Screening slot has been registered.\nPI: {pi_name}\nSample: {sample_name}\nGrids: {grids}\n\nCryo-EM Team")
+            return redirect(url_for('list_view'))
+
     return render_template('register.html')
 
 @app.route('/list')
@@ -139,10 +232,30 @@ def list_view():
     waiting_slots = list(registrations_collection.find({'status': 'waiting'}))
     return render_template('list.html', ongoing_slots=ongoing_slots, waiting_slots=waiting_slots)
 
+@app.route('/freezing_schedule')
+def freezing_schedule():
+    today = datetime.date.today()
+
+    # move expired to completed_freezing
+    expired = list(freezing_bookings_collection.find({'freezing_date': {'$lt': today}, 'status': 'active'}))
+    for e in expired:
+        entry = e.copy()
+        entry.pop('_id', None)
+        entry['completed_at'] = datetime.datetime.now()
+        completed_freezing_collection.insert_one(entry)
+        freezing_bookings_collection.update_one({'_id': e['_id']}, {'$set': {'status': 'completed'}})
+        send_email(e['email'], 'Cryo-EM Freezing Completed',
+                   f"Dear {e['user_name']},\n\nYour freezing on {e['freezing_date']} is completed.\n\nCryo-EM Team")
+
+    active = list(freezing_bookings_collection.find({'status': 'active'}))
+    completed = list(completed_freezing_collection.find({}).sort('completed_at', -1))
+    return render_template('freezingschedule.html', active_slots=active, completed_slots=completed)
+
 @app.route('/history')
 def history():
     history_entries = list(history_collection.find({}))
-    return render_template('history.html', history_entries=history_entries)
+    completed_freeze = list(completed_freezing_collection.find({}))
+    return render_template('history.html', history_entries=history_entries, completed_freezing=completed_freeze)
 
 # --- Admin Routes ---
 @app.route('/admin', methods=['GET', 'POST'])
@@ -249,13 +362,24 @@ def admin_logout():
     session.pop('admin_logged_in', None)
     return redirect(url_for('index'))
 
+@app.route('/admin/history', endpoint='admin_history')
+def admin_history():
+    if not session.get('admin_logged_in'):
+        return redirect(url_for('admin'))
+
+    completed_imaging = list(registrations_collection.find({'status': 'completed'}).sort('completion_date', -1))
+    completed_freezing = list(completed_freezing_collection.find({}).sort('completed_at', -1))
+    return render_template('history.html',
+                           completed_imaging=completed_imaging,
+                           completed_freezing=completed_freezing)
+
 @app.before_request
 def check_admin_session():
     """Logs out admin if they navigate away from admin pages."""
     if 'admin_logged_in' in session and request.endpoint:
         allowed_endpoints = [
             'admin_panel', 'admin_logout', 'load_registration',
-            'complete_registration', 'delete_registration', 'static'
+            'complete_registration', 'delete_registration', 'admin_history', 'static'
         ]
         if request.endpoint not in allowed_endpoints:
             session.pop('admin_logged_in', None)
