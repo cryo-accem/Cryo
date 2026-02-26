@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Freezing Schedule</title>
+</head>
+<body>
+    <h1>Freezing Schedule</h1>
+    <h2>Active Slots</h2>
+    {% for slot in active_slots %}
+        <div>{{ slot.user_name }} - {{ slot.freezing_date }} ({{ slot.grids }} grids)</div>
+    {% endfor %}
+    <h2>Completed Slots</h2>
+    {% for slot in completed_slots %}
+        <div>{{ slot.user_name }} - {{ slot.freezing_date }} ({{ slot.grids }} grids) completed at {{ slot.completed_at }}</div>
+    {% endfor %}
+</body>
+</html>
