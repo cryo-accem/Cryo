@@ -1,4 +1,6 @@
-Flask
-pymongo
-Flask-Mail
-gunicorn
+Flask==2.3.3
+Flask-Mail==0.9.1
+Flask-MySQLdb==2.0.0
+mysqlclient==2.2.0
+Werkzeug==2.3.7
+gunicorn==21.2.0
