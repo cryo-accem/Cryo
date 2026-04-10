@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <title>Cryo-EM Centre</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #e9ecf1;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        .main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 50px;
+        }
+
+        .header {
+            background-color: #002147;
+            color: white;
+            padding: 20px;
+            border-radius: 20px 20px 0 0;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 5px 0;
+            font-size: 22px;
+        }
+
+        .logo-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .left-logo, .right-logo {
+            width: 100px;
+            height: auto;
+        }
+
+        .title {
+            flex-grow: 1;
+            text-align: center;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: 20px auto;
+            position: relative;
+            flex-direction: column;
+        }
+
+        .top-buttons {
+            position: absolute;
+            top: 10px;
+            right: -1px;
+            display: flex;
+            gap: 20px;
+            z-index: 1;
+        }   
+
+        .top-buttons a {
+            color: black;
+            text-decoration: none;
+            font-size: 24px;
+        }
+
+        .top-buttons a i {
+            padding: 4px;
+            transition: transform 0.2s ease, color 0.2s ease;
+        }
+
+        .top-buttons a:hover i {
+            transform: scale(1.2);
+            color: #0056b3;
+        }
+
+        .slideshow-container {
+            width: 60%;
+            max-width: 800px;
+            border-radius: 10px;
+            overflow: hidden;
+            background-color: white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            position: relative;
+            margin-top: 40px; /* <-- moved slideshow slightly down */
+        }
+
+        .slideshow {
+            display: flex;
+            width: 100%;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .slide {
+            min-width: 100%;
+        }
+
+        .slide img {
+            width: 100%;
+            height: 50vh; 
+            display: block;          
+            object-fit: cover; 
+        }
+
+        .slideshow-controls {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            transform: translateY(-50%);
+        }
+
+        .slideshow-btn {
+            background-color: rgba(0, 86, 179, 0.7);
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .slide-indicators {
+            display: flex;
+            justify-content: center;
+            margin: 10px 0;
+        }
+
+        .indicator {
+            width: 12px;
+            height: 12px;
+            background-color: #ccc;
+            border-radius: 50%;
+            margin: 0 5px;
+            cursor: pointer;
+        }
+
+        .indicator.active {
+            background-color: #0056b3;
+        }
+
+        .footer {
+            background-color: #002147;
+            color: white;
+            padding: 20px;
+            border-radius: 0 0 20px 20px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .description {
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            background-color: #0056b3;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background-color: #003d7a;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main">
+        <header class="header">
+            <div class="logo-container">
+                <img src="{{ url_for('static', filename='images/iisc_logo.png') }}" class="left-logo" alt="Left Logo">
+                <div class="title">
+                    <h1>ADVANCED CENTRE</h1>
+                    <h1>FOR</h1>
+                    <h1>CRYO ELECTRON MICROSCOPY</h1>
+                </div>
+                <img src="{{ url_for('static', filename='images/cryo.png') }}" class="right-logo" alt="Right Logo">
+            </div>
+        </header>
+
+        <div class="container">
+            <div class="top-buttons">
+                <a href="{{ url_for('public.index') }}" title="Home"><i class="fas fa-home"></i></a>
+                <a href="{{ url_for('public.about') }}" title="About"><i class="fas fa-info-circle"></i></a>
+                <a href="{{ url_for('public.facility') }}" title="Instruction"><i class="fas fa-sticky-note"></i></a>
+                <a href="{{ url_for('public.equipments') }}" title="Equipments"><i class="fas fa-microscope"></i></a>
+                <a href="{{ url_for('public.publications') }}" title="Publications"><i class="fas fa-newspaper"></i></a>
+                <a href="{{ url_for('public.team') }}" title="Team"><i class="fas fa-users"></i></a>
+            </div>
+
+            <div class="slideshow-container">
+                <div class="slideshow">
+                    {% for image in slideshow_images %}
+                    <div class="slide">
+                        <img src="{{ url_for('static', filename='slideshow/' + image) }}" alt="Cryo-EM Image {{ loop.index }}">
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <div class="slideshow-controls">
+                    <button class="slideshow-btn prev-btn">&#10094;</button>
+                    <button class="slideshow-btn next-btn">&#10095;</button>
+                </div>
+                <div class="slide-indicators">
+                    {% for image in slideshow_images %}
+                    <div class="indicator {% if loop.first %}active{% endif %}" data-index="{{ loop.index0 }}"></div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p class="description">
+                Where Frozen matter meets Quantum Precision, We Decode life's Architecture in Atomic Detail — 
+                Cryo-EM: Imaging the Future of Molecular Science.
+            </p>
+            <div class="action-buttons">
+                <a href="{{ url_for('imaging.list_view') }}" class="action-btn">Data Collecting Schedule</a>
+                <a href="{{ url_for('register.register') }}" class="action-btn">Slot Register</a>
+                <a href="{{ url_for('freezing.freezing_schedule') }}" class="action-btn">Freezing Schedule</a>
+                <a href="{{ url_for('screening.screening_list') }}" class="action-btn">Screening Schedule</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const slideshow = document.querySelector('.slideshow');
+            const slides = document.querySelectorAll('.slide');
+            const prevBtn = document.querySelector('.prev-btn');
+            const nextBtn = document.querySelector('.next-btn');
+            const indicators = document.querySelectorAll('.indicator');
+
+            let currentIndex = 0;
+            const slideCount = slides.length;
+
+            function updateSlide() {
+                slideshow.style.transform = `translateX(-${currentIndex * 100}%)`;
+                indicators.forEach((dot, idx) => {
+                    dot.classList.toggle('active', idx === currentIndex);
+                });
+            }
+
+            function nextSlide() {
+                currentIndex = (currentIndex + 1) % slideCount;
+                updateSlide();
+            }
+
+            function prevSlide() {
+                currentIndex = (currentIndex - 1 + slideCount) % slideCount;
+                updateSlide();
+            }
+
+            nextBtn.addEventListener('click', nextSlide);
+            prevBtn.addEventListener('click', prevSlide);
+
+            indicators.forEach(ind => {
+                ind.addEventListener('click', () => {
+                    currentIndex = parseInt(ind.getAttribute('data-index'));
+                    updateSlide();
+                });
+            });
+
+            updateSlide();
+            setInterval(nextSlide, 5000);
+        });
+    </script>
+
+</body>
+</html>

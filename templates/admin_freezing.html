@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Freezing Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        body { font-family: Arial, Helvetica, sans-serif; background-color: #e9ecf1; margin: 0; padding: 0; display: flex; justify-content: center; min-height: 100vh; }
+        .main { width: 1200px; margin: 20px 0; }
+        .header { background-color: #002147; color: white; padding: 20px; border-radius: 20px 20px 0 0; text-align: center; box-sizing: border-box; }
+        .header h1 { margin: 5px 0; font-size: 22px; }
+        .logo-container { display: flex; justify-content: space-between; align-items: center; }
+        .left-logo, .right-logo { width: 100px; height: auto; }
+        .title { text-align: center; flex-grow: 1; padding: 0 20px; }
+        .container { padding: 20px; background-color: white; border-radius: 0 0 8px 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); min-height: 600px; position: relative; box-sizing: border-box; }
+        .top-buttons { position: absolute; top: 20px; right: 20px; display: flex; gap: 20px; }
+        .top-buttons a { color: #333; text-decoration: none; font-size: 22px; }
+        .top-buttons a:hover i { color: #0056b3; }
+        h2, h3 { text-align: center; color: #333; }
+        .section { background: white; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); padding: 20px; margin-bottom: 30px; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { padding: 10px 14px; text-align: center; border-bottom: 1px solid #ddd; white-space: nowrap; }
+        th { background-color: #002147; color: white; font-weight: bold; }
+        tr:nth-child(even) { background-color: #f9f9f9; }
+        tr:hover { background-color: #f5f5f5; }
+        .empty-message { text-align: center; font-style: italic; color: #777; padding: 20px; }
+        .bottom-buttons { display: flex; justify-content: center; gap: 20px; margin-top: 20px; padding-bottom: 10px; }
+        .btn-back { background-color: #0056b3; color: white; padding: 10px 25px; text-decoration: none; border-radius: 5px; font-weight: bold; }
+        .btn-back:hover { background-color: #003d7a; }
+        .footer { background-color: #002147; color: white; padding: 20px; border-radius: 0 0 20px 20px; text-align: center; box-sizing: border-box; }
+    </style>
+</head>
+<body>
+<div class="main">
+    <div class="header">
+        <div class="logo-container">
+            <img src="{{ url_for('static', filename='images/iisc_logo.png') }}" alt="Institute Logo" class="left-logo">
+            <div class="title"><h1>ADVANCED CENTRE FOR CRYO ELECTRON MICROSCOPY</h1></div>
+            <img src="{{ url_for('static', filename='images/cryo.png') }}" alt="Cryo-EM Logo" class="right-logo">
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="top-buttons">
+            <a href="{{ url_for('public.home') }}" title="Home"><i class="fas fa-home"></i></a>
+            <a href="{{ url_for('admin.panel') }}" title="Dashboard"><i class="fas fa-arrow-left"></i></a>
+        </div>
+
+        <h2>Freezing Management</h2>
+
+        <div class="section">
+            <h3>Active Freezing Slots</h3>
+            {% if active_slots %}
+            <table>
+                <thead><tr>
+                    <th>#</th><th>User Name</th><th>PI Name</th><th>Origin</th>
+                    <th>Sample</th><th>Grids</th><th>Freezing Date</th><th>Registered At</th>
+                </tr></thead>
+                <tbody>
+                {% for slot in active_slots %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ slot.user_name }}</td><td>{{ slot.pi_name }}</td>
+                    <td>{{ slot.origin }}</td><td>{{ slot.sample_name }}</td>
+                    <td>{{ slot.grids }}</td><td>{{ slot.freezing_date }}</td>
+                    <td>{{ slot.registered_at.strftime('%Y-%m-%d') if slot.registered_at else '' }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {% else %}<div class="empty-message">No active freezing slots.</div>{% endif %}
+        </div>
+
+        <div class="section">
+            <h3>Completed Freezing Slots</h3>
+            {% if completed_slots %}
+            <table>
+                <thead><tr>
+                    <th>#</th><th>User Name</th><th>PI Name</th><th>Origin</th>
+                    <th>Sample</th><th>Grids</th><th>Freezing Date</th><th>Completed At</th>
+                </tr></thead>
+                <tbody>
+                {% for slot in completed_slots %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ slot.user_name }}</td><td>{{ slot.pi_name }}</td>
+                    <td>{{ slot.origin }}</td><td>{{ slot.sample_name }}</td>
+                    <td>{{ slot.grids }}</td><td>{{ slot.freezing_date }}</td>
+                    <td>{{ slot.completed_at.strftime('%Y-%m-%d') if slot.completed_at else '' }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {% else %}<div class="empty-message">No completed freezing slots.</div>{% endif %}
+        </div>
+
+        <div class="bottom-buttons">
+            <a href="{{ url_for('admin.panel') }}" class="btn-back">&#8592; Back to Dashboard</a>
+        </div>
+    </div>
+
+    <div class="footer"><p>&copy; 2025 Advanced Centre for Cryo Electron Microscopy</p></div>
+</div>
+</body>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <title>About Cryo-EM Centre</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #e9ecf1;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        .main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 50px;
+        }
+        .header {
+            background-color: #002147;
+            color: white;
+            padding: 20px;
+            border-radius: 20px 20px 0 0;
+            text-align: center;
+        }
+        .header h1 {
+
+            margin: 5px 0;
+            font-size: 22px;
+        }
+        .logo-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .left-logo, .right-logo {
+            width: 100px;
+            height: auto;
+        }
+        .title {
+            text-align: center;
+            flex-grow: 1;
+        }
+        .container {
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            line-height: 2.2;
+            height:auto;
+        }
+        .top-buttons {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 20px;
+            z-index: 1;
+        }
+        .top-buttons a {
+            color: black;
+            text-decoration: none;
+            font-size: 24px;
+        }
+
+        .top-buttons a i {
+            padding: 5px;
+            transition: transform 0.2s ease, color 0.2s ease;
+        }
+
+        .top-buttons a:hover i {
+            transform: scale(1.2);
+            color: #0056b3;
+        }
+
+        .footer {
+            background-color: #002147;
+            color: white;
+            padding: 20px;
+            border-radius: 0 0 20px 20px;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+   <div class="main">
+    <div class="header">
+        <div class="logo-container">
+            <img src="{{ url_for('static', filename='images/iisc_logo.png') }}" alt="Institute Logo" class="left-logo">
+            <div class="title">
+                <h1>ADVANCED CENTRE</h1>
+                <h1>FOR</h1>
+                <h1>CRYO ELECTRON MICROSCOPY</h1>
+            </div>
+            <img src="{{ url_for('static', filename='images/cryo.png') }}" alt="Cryo-EM Logo" class="right-logo">
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="top-buttons">
+        <a href="{{ url_for('public.home') }}" title="Home"><i class="fas fa-home"></i></a>
+        <a href="{{ url_for('public.about') }}" title="About"><i class="fas fa-info-circle"></i></a>
+        <a href="{{ url_for('public.facility') }}" title="Instruction"><i class="fas fa-sticky-note"></i></a>
+        <a href="{{ url_for('public.equipments') }}" title="Equipments"><i class="fas fa-microscope"></i></a>
+        <a href="{{ url_for('public.publications') }}" title="Publications"><i class="fas fa-newspaper"></i></a>
+        <a href="{{ url_for('public.team') }}" title="Team"><i class="fas fa-users"></i></a>
+        </div>
+
+            <h1>About</h1>
+            <hr>
+            <p>The Cryo-electron microscopy facility at IISc features a state-of-the-art 200 kV Talos-Arctica electron microscope (FEI/Thermo Scientific) equipped with a Gatan K2 Summit Direct Electron Detector, automatic data acquisition via the Latitude S software package, and a Talos L120C Transmission Electron Microscope. Typically, the Talos L120C is used for negative stain sample visualization before proceeding to cryo-EM data collection using the 200 kV Talos-Arctica microscope.</p>
+
+            <p>The facility is also equipped with essential sample preparation tools such as the FEI Vitrobot™ Mark IV, Pelco easiGLOW & GloQube glow discharge system, and Q150T ES carbon coater.</p>
+
+            <p>We provide one of the finest cryo-EM facilities in India, supporting negative staining, cryo-EM sample preparation, high-throughput data acquisition, fast data transfer, secure storage, and automatic movie frame alignment. Researchers are supported throughout sample preparation, data collection, and preliminary image analysis.</p>
+
+            <p><strong>Mission:</strong> Our goal is to offer open access to the cryo-EM facility for all researchers through a nominal charge or collaborative model. Renowned faculty, postdocs, and EM managers at IISc provide training on protein purification, sample prep, data collection, and basic image processing. Our broader vision is to establish a national-level cryo-EM hub that benefits researchers across India.</p>
+
+            <p><strong>Note:</strong> Currently, full-scale data processing support is limited to collaborative projects only.</p>
+
+            <p><strong>This facility was developed with support from the Department of Biotechnology (DBT-SAHAJ), Government of India, through Infrastructure Grants, and the DST-FIST grant to the Molecular Biophysics Unit, IISc</strong></p>
+    </div>
+
+        <div class="footer">
+            <p style="color:white">&copy; 2025 Advanced Centre for Cryo Electron Microscopy</p>
+        </div>
+    </div>
+</body>
+</html>

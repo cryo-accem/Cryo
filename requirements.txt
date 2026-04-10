@@ -1,0 +1,6 @@
+Flask==3.0.3
+Werkzeug==3.0.3
+Flask-Mail==0.9.1
+pymysql==1.1.0
+cryptography==42.0.8
+gunicorn==22.0.0

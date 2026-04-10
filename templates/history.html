@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <title>History</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #e9ecf1;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        .main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 50px;
+        }
+        .header {
+            background-color: #002147;
+            color: white;
+            padding: 20px;
+            border-radius: 20px 20px 0 0;
+            text-align: center;
+            position: relative;
+        }
+        .header h1 {
+            margin: 5px 0;
+            font-size: 22px;
+        }
+        .logo-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .left-logo, .right-logo {
+            width: 100px;
+            height: auto;
+        }
+        .title {
+            text-align: center;
+            flex-grow: 1;
+        }
+        .container {
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        h2 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .section {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 30px;
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+            white-space: nowrap;
+        }
+        th {
+            background-color: #002147;
+            color: white;
+            font-weight: bold;
+        }
+        tr:nth-child(even) { background-color: #f9f9f9; }
+        tr:hover { background-color: #f1f1f1; }
+        .empty-message {
+            text-align: center;
+            font-style: italic;
+            color: #777;
+            padding: 20px;
+        }
+        .top-buttons {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 20px;
+            z-index: 1;
+        }
+        .top-buttons a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 22px;
+        }
+        .top-buttons a:hover i { color: #66b2ff; transform: scale(1.2); }
+        .footer {
+            background-color: #002147;
+            color: white;
+            padding: 20px;
+            border-radius: 0 0 20px 20px;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="main">
+    <div class="header">
+        <div class="logo-container">
+            <img src="{{ url_for('static', filename='images/iisc_logo.png') }}" alt="Institute Logo" class="left-logo">
+            <div class="title">
+                <h1>ADVANCED CENTRE</h1>
+                <h1>FOR</h1>
+                <h1>CRYO ELECTRON MICROSCOPY</h1>
+            </div>
+            <img src="{{ url_for('static', filename='images/cryo.png') }}" alt="Cryo-EM Logo" class="right-logo">
+        </div>
+        <div class="top-buttons">
+            <a href="{{ url_for('public.home') }}" title="Home"><i class="fas fa-home"></i></a>
+            <a href="{{ url_for('admin.panel') }}" title="Back"><i class="fas fa-arrow-left"></i></a>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Completed Imaging Slots</h2>
+        <div class="section">
+            {% if completed_imaging %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Position</th>
+                        <th>User Name</th>
+                        <th>PI Name</th>
+                        <th>Origin</th>
+                        <th>Sample Name</th>
+                        <th>Grids</th>
+                        <th>Days</th>
+                        <th>Completion Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for slot in completed_imaging %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ slot.user_name }}</td>
+                        <td>{{ slot.pi_name }}</td>
+                        <td>{{ slot.origin }}</td>
+                        <td>{{ slot.sample_name }}</td>
+                        <td>{{ slot.grids }}</td>
+                        <td>{{ slot.days }}</td>
+                        <td>{{ slot.completion_date }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div class="empty-message">No completed imaging slots found.</div>
+            {% endif %}
+        </div>
+
+        <h2>Completed Freezing Slots</h2>
+        <div class="section">
+            {% if completed_freezing %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Position</th>
+                        <th>User Name</th>
+                        <th>PI Name</th>
+                        <th>Origin</th>
+                        <th>Sample Name</th>
+                        <th>Grids</th>
+                        <th>Freezing Date</th>
+                        <th>Completed At</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for slot in completed_freezing %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ slot.user_name }}</td>
+                        <td>{{ slot.pi_name }}</td>
+                        <td>{{ slot.origin }}</td>
+                        <td>{{ slot.sample_name }}</td>
+                        <td>{{ slot.grids }}</td>
+                        <td>{{ slot.freezing_date }}</td>
+                        <td>{{ slot.completed_at.strftime('%Y-%m-%d') if slot.completed_at else '' }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div class="empty-message">No completed freezing slots found.</div>
+            {% endif %}
+        </div>
+
+        <h2>Completed Screening Slots</h2>
+        <div class="section">
+            {% if completed_screening %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Position</th><th>User Name</th><th>PI Name</th><th>Origin</th>
+                        <th>Sample Name</th><th>Grids</th><th>Days</th><th>Completion Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for slot in completed_screening %}
+                    <tr>
+                        <td>{{ loop.index }}</td><td>{{ slot.user_name }}</td><td>{{ slot.pi_name }}</td>
+                        <td>{{ slot.origin }}</td><td>{{ slot.sample_name }}</td>
+                        <td>{{ slot.grids }}</td><td>{{ slot.days }}</td><td>{{ slot.completion_date }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div class="empty-message">No completed screening slots found.</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2025 Advanced Centre for Cryo Electron Microscopy</p>
+    </div>
+</div>
+</body>
+</html>
