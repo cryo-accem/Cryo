@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">Hands-on cryo-EM training</title>
+  <desc id="desc">An original illustration of a cryo-electron microscopy training session with a microscope, cryo-grid and analysis screens.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1f3a"/>
+      <stop offset="1" stop-color="#164e63"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f8fbff"/>
+      <stop offset="1" stop-color="#cbd5e1"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%">
+      <feDropShadow dx="0" dy="14" stdDeviation="14" flood-color="#020617" flood-opacity=".35"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="700" fill="url(#bg)"/>
+  <circle cx="1000" cy="90" r="230" fill="#38bdf8" opacity=".12"/>
+  <circle cx="160" cy="650" r="260" fill="#2dd4bf" opacity=".1"/>
+  <path d="M0 570 C280 500 390 650 650 565 S980 490 1200 560 V700 H0Z" fill="#071a31" opacity=".55"/>
+
+  <g filter="url(#shadow)">
+    <rect x="690" y="110" width="390" height="245" rx="18" fill="#111827"/>
+    <rect x="715" y="135" width="340" height="185" rx="8" fill="#dbeafe"/>
+    <rect x="735" y="155" width="140" height="145" fill="#0f3b5b"/>
+    <g stroke="#67e8f9" stroke-width="3" opacity=".9">
+      <path d="M745 260h120M745 220h120M745 180h120"/>
+      <path d="M765 165v130M805 165v130M845 165v130"/>
+    </g>
+    <circle cx="805" cy="224" r="38" fill="none" stroke="#fbbf24" stroke-width="5"/>
+    <circle cx="805" cy="224" r="10" fill="#fbbf24"/>
+    <rect x="900" y="155" width="130" height="18" rx="9" fill="#0f3b5b"/>
+    <rect x="900" y="190" width="100" height="12" rx="6" fill="#38bdf8"/>
+    <rect x="900" y="218" width="115" height="12" rx="6" fill="#2dd4bf"/>
+    <rect x="900" y="246" width="80" height="12" rx="6" fill="#fbbf24"/>
+    <text x="715" y="390" fill="#e0f2fe" font-family="Arial, sans-serif" font-size="24" font-weight="700">IMAGE ANALYSIS</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <path d="M200 520h300l-25-285h-250z" fill="url(#panel)"/>
+    <path d="M230 235h240l-42-78H272z" fill="#94a3b8"/>
+    <rect x="285" y="115" width="95" height="70" rx="18" fill="#475569"/>
+    <rect x="315" y="70" width="35" height="65" rx="17" fill="#cbd5e1"/>
+    <path d="M350 183v175" stroke="#334155" stroke-width="18"/>
+    <path d="M305 350h90l-15 104h-60z" fill="#64748b"/>
+    <ellipse cx="350" cy="468" rx="115" ry="28" fill="#0f172a"/>
+    <ellipse cx="350" cy="456" rx="82" ry="18" fill="#22d3ee"/>
+    <circle cx="350" cy="456" r="42" fill="none" stroke="#e0f2fe" stroke-width="5" stroke-dasharray="5 8"/>
+    <text x="215" y="565" fill="#e0f2fe" font-family="Arial, sans-serif" font-size="24" font-weight="700">CRYO-EM</text>
+  </g>
+
+  <g transform="translate(560 470)" filter="url(#shadow)">
+    <rect width="210" height="125" rx="16" fill="#e2e8f0"/>
+    <rect x="20" y="20" width="170" height="78" rx="8" fill="#164e63"/>
+    <circle cx="65" cy="59" r="24" fill="none" stroke="#fbbf24" stroke-width="4"/>
+    <circle cx="65" cy="59" r="7" fill="#fbbf24"/>
+    <path d="M105 42h65M105 59h48M105 76h57" stroke="#a5f3fc" stroke-width="7" stroke-linecap="round"/>
+    <text x="20" y="115" fill="#0f172a" font-family="Arial, sans-serif" font-size="15" font-weight="700">GRID SCREENING</text>
+  </g>
+
+  <g fill="#f8fafc" font-family="Arial, sans-serif">
+    <text x="70" y="92" font-size="18" letter-spacing="4" fill="#67e8f9">ACCEM PRACTICAL COURSE</text>
+    <text x="70" y="145" font-size="42" font-weight="700">Hands-on cryo-EM training</text>
+    <text x="70" y="184" font-size="20" fill="#bae6fd">Prepare · Screen · Collect · Process</text>
+  </g>
+</svg>

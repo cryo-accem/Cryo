@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}ACCEM | Data collection schedule{% endblock %}
+{% block content %}
+<main class="portal-page">
+  <section class="page-content">
+    <header class="page-header page-header--portal page-header--schedule"><div><div class="eyebrow">User portal</div><h1>Data collecting slots</h1><p>Current availability for cryo-EM data collection.</p></div></header>
+    <div class="data-stack">
+      <section class="data-panel"><h2>Ongoing slots</h2>{% if ongoing_slots %}<div class="table-wrap"><table class="data-table"><thead><tr><th>Position</th><th>Name of User</th><th>Name of PI</th><th>Origin</th><th>Registration Date</th></tr></thead><tbody>{% for slot in ongoing_slots %}<tr><td>{{ loop.index }}</td><td>{{ slot.user_name }}</td><td>{{ slot.pi_name }}</td><td>{{ slot.origin if slot.origin else slot.esm }}</td><td>{{ slot.registration_date }}</td></tr>{% endfor %}</tbody></table></div>{% else %}<div class="empty-message">No ongoing slots at the moment.</div>{% endif %}</section>
+      <section class="data-panel"><h2>Waiting slots</h2>{% if waiting_slots %}<div class="table-wrap"><table class="data-table"><thead><tr><th>Position</th><th>Name of User</th><th>Name of PI</th><th>Origin</th><th>Registration Date</th></tr></thead><tbody>{% for slot in waiting_slots %}<tr><td>{{ loop.index }}</td><td>{{ slot.user_name }}</td><td>{{ slot.pi_name }}</td><td>{{ slot.origin if slot.origin else slot.esm }}</td><td>{{ slot.registration_date }}</td></tr>{% endfor %}</tbody></table></div>{% else %}<div class="empty-message">No waiting slots at the moment.</div>{% endif %}</section>
+      <section class="data-panel" id="history">
+        <h2>History</h2>
+        {% if completed_slots %}
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead><tr><th>Position</th><th>Name of User</th><th>Name of PI</th><th>Origin</th><th>Registration Date</th></tr></thead>
+              <tbody>{% for slot in completed_slots %}<tr><td>{{ loop.index }}</td><td>{{ slot.user_name }}</td><td>{{ slot.pi_name }}</td><td>{{ slot.origin if slot.origin else slot.esm }}</td><td>{{ slot.registration_date }}</td></tr>{% endfor %}</tbody>
+            </table>
+          </div>
+        {% else %}
+          <div class="empty-message">No completed data collection slots yet.</div>
+        {% endif %}
+      </section>
+    </div>
+  </section>
+  <div class="success-modal" id="success-modal" data-success-type="Data collection">
+    <div class="success-modal__content" role="dialog" aria-modal="true" aria-labelledby="success-modal-title">
+      <div class="success-modal__icon">✓</div>
+      <h3 id="success-modal-title">Registration successful</h3>
+      <p>Registration for <strong>Data collection</strong> has been completed successfully.</p>
+      <button type="button" class="primary-btn" onclick="document.getElementById('success-modal').classList.remove('show')">Continue</button>
+    </div>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const modal = document.getElementById('success-modal');
+      const params = new URLSearchParams(window.location.search);
+      if ((window.location.hash === '#history' || params.get('success')) && modal) {
+        modal.classList.add('show');
+      }
+    });
+  </script>
+</main>
+{% endblock %}

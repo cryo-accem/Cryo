@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}ACCEM | Admin dashboard{% endblock %}
+{% block content %}
+<main class="portal-page"><section class="page-content">
+  <header class="page-header page-header--admin"><div><div class="eyebrow">Administration</div><h1>Admin dashboard</h1><p>Manage registrations and monitor facility activity.</p></div></header>
+  <div class="dashboard-grid">
+    <a href="{{ url_for('admin.datacollecting') }}" class="dashboard-card"><i class="fas fa-database"></i><strong>Data Collecting</strong><span>Review and manage data collection registrations.</span></a>
+    <a href="{{ url_for('admin.freezing_admin') }}" class="dashboard-card"><i class="fas fa-snowflake"></i><strong>Freezing</strong><span>Manage active and completed freezing slots.</span></a>
+    <a href="{{ url_for('admin.screening_admin') }}" class="dashboard-card"><i class="fas fa-microscope"></i><strong>Screening</strong><span>Review screening requests and progress.</span></a>
+  </div>
+  <div class="page-actions"><a href="{{ url_for('admin.history') }}" class="button">View history</a><a href="{{ url_for('admin.logout') }}" class="button muted">Logout</a></div>
+</section></main>
+{% endblock %}

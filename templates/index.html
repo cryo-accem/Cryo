@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}ACCEM | Welcome{% endblock %}
+{% block content %}
+<main class="index-page">
+  <section class="page-content">
+    <div class="page-header page-header--science">
+      <div class="eyebrow">Indian Institute of Science · Bengaluru</div>
+      <h1>Advanced Centre for Cryo-Electron Microscopy</h1>
+      <p>Developed and Maintained by New Star Infosis Team.</p>
+    </div>
+    <img src="{{ url_for('static', filename='images/black.png') }}" alt="IISc Logo" class="index-logo">
+    <p class="prose index-details">Department of Molecular Biophysics Unit<br>Indian Institute of Science<br>Bangalore - 560 012, India.</p>
+    <a href="{{ url_for('public.home') }}" class="button">Enter the facility</a>
+  </section>
+</main>
+{% endblock %}

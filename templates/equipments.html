@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}ACCEM | Equipment{% endblock %}
+{% block content %}
+<main>
+  <section class="page-content">
+    <header class="page-header page-header--equipment"><div><div class="eyebrow">Infrastructure</div><h1>Equipment &amp; capabilities</h1><p>Specialised instrumentation for sample preparation, imaging and structural analysis.</p></div></header>
+    <section class="equipment-featured">
+      <div class="section-heading"><h2>Current instrumentation</h2><p>High-resolution imaging and direct electron detection for demanding cryo-EM projects.</p></div>
+      <article class="equipment-hero-card equipment-hero-card--primary">
+        <img src="{{ url_for('static', filename='images/talos_arctica.png') }}" alt="Talos Arctica 200kV Cryo-TEM">
+        <div class="equipment-hero-copy"><h2>Talos Arctica - 200kV Cryo-TEM</h2><p>Optimized for high-resolution imaging of biological macromolecules, single-particle analysis and cryo-electron tomography.</p><h3>Equipped with</h3><ol><li>200 kV accelerating voltage</li><li>Autoloader</li><li>Optimized low-dose imaging</li><li>Stage tilt optimized for both SPA and tomography</li></ol></div>
+      </article>
+      <article class="equipment-hero-card equipment-hero-card--reverse equipment-hero-card--detector">
+        <div class="equipment-hero-copy"><h2>Direct Electron Detector (Gatan K2 Summit)</h2><p>A 4k × 4k direct electron detector for electron counting, super-resolution and dose-fractionated movie acquisition.</p><h3>Direct electron detection</h3><p>High detective quantum efficiency, low noise and seamless integration with the Talos Arctica for high-throughput data collection.</p></div>
+        <img src="{{ url_for('static', filename='images/direct_detector.png') }}" alt="Gatan K2 Summit direct electron detector">
+      </article>
+    </section>
+    <section class="equipment-groups">
+      <div class="equipment-group"><div class="section-heading"><h2>Sample preparation</h2><p>Infrastructure for reproducible grid preparation and cryogenic handling.</p></div><div class="equipment-card-grid">
+        <article class="equipment-tile"><img src="{{ url_for('static', filename='images/pelco_easiGlow.png') }}" alt="PELCO easiGlow glow discharge system"><div><h3>PELCO easiGlow</h3><p>Glow discharge treatment for consistent grid surface preparation.</p></div></article>
+        <article class="equipment-tile"><img src="{{ url_for('static', filename='images/fei_vitrobot.png') }}" alt="FEI Vitrobot"><div><h3>FEI Vitrobot</h3><p>Semi-automated plunge freezing under controlled temperature and humidity.</p></div></article>
+        <article class="equipment-tile"><img src="{{ url_for('static', filename='images/black.png') }}" alt="Quorum Q150T ES Plus"><div><h3>Quorum Q150T ES Plus</h3><p>Dual-function sputter and carbon coating for grid preparation.</p></div></article>
+        <article class="equipment-tile"><img src="{{ url_for('static', filename='images/sample.jpg') }}" alt="Sample preparation infrastructure"><div><h3>Sample preparation infrastructure</h3><p>Clipping, autogrid loading and cryogenic storage infrastructure.</p></div></article>
+      </div></div>
+      <div class="equipment-group"><div class="section-heading"><h2>Data processing</h2><p>Computing resources for scalable reconstruction and structure determination.</p></div><div class="equipment-card-grid equipment-card-grid--single">
+        <article class="equipment-tile"><img src="{{ url_for('static', filename='images/server.jpg') }}" alt="Data processing servers"><div><h3>Cluster &amp; high-throughput data processing servers</h3><p>CPU and GPU resources with high-speed storage for demanding cryo-EM datasets.</p></div></article>
+      </div></div>
+    </section>
+  </section>
+</main>
+{% endblock %}

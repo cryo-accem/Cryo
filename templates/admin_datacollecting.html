@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}ACCEM | Data collecting management{% endblock %}
+{% block content %}
+<main class="portal-page"><section class="page-content">
+  <header class="page-header page-header--admin"><div><div class="eyebrow">Administration</div><h1>Data collecting management</h1><p>Move registrations through the data collection workflow.</p></div></header>
+  <div class="data-stack">
+    <section class="data-panel"><h2>Waiting</h2>{% if waiting_registrations %}<div class="table-wrap"><table class="data-table"><thead><tr><th>User Name</th><th>PI Name</th><th>Email</th><th>Origin</th><th>Institute</th><th>Sample</th><th>Grids</th><th>Days</th><th>Reg. Date</th><th>Actions</th></tr></thead><tbody>{% for reg in waiting_registrations %}<tr><td>{{ reg.user_name }}</td><td>{{ reg.pi_name }}</td><td>{{ reg.email }}</td><td>{{ reg.origin }}</td><td>{{ reg.esm }}</td><td>{{ reg.sample_name }}</td><td>{{ reg.grids }}</td><td>{{ reg.days }}</td><td>{{ reg.registration_date }}</td><td class="action-buttons"><a href="{{ url_for('admin.load_dc', booking_id=reg.id) }}" class="btn btn-load">Load</a><a href="{{ url_for('admin.delete_dc', booking_id=reg.id) }}" class="btn btn-delete">Delete</a></td></tr>{% endfor %}</tbody></table></div>{% else %}<div class="empty-message">No waiting registrations.</div>{% endif %}</section>
+    <section class="data-panel"><h2>Ongoing</h2>{% if ongoing_registrations %}<div class="table-wrap"><table class="data-table"><thead><tr><th>User Name</th><th>PI Name</th><th>Email</th><th>Origin</th><th>Institute</th><th>Sample</th><th>Grids</th><th>Days</th><th>Reg. Date</th><th>Actions</th></tr></thead><tbody>{% for reg in ongoing_registrations %}<tr><td>{{ reg.user_name }}</td><td>{{ reg.pi_name }}</td><td>{{ reg.email }}</td><td>{{ reg.origin }}</td><td>{{ reg.esm }}</td><td>{{ reg.sample_name }}</td><td>{{ reg.grids }}</td><td>{{ reg.days }}</td><td>{{ reg.registration_date }}</td><td class="action-buttons"><a href="{{ url_for('admin.complete_dc', booking_id=reg.id) }}" class="btn btn-complete">Complete</a><a href="{{ url_for('admin.delete_dc', booking_id=reg.id) }}" class="btn btn-delete">Delete</a></td></tr>{% endfor %}</tbody></table></div>{% else %}<div class="empty-message">No ongoing registrations.</div>{% endif %}</section>
+  </div>
+  <div class="page-actions"><a href="{{ url_for('admin.panel') }}" class="button secondary">← Back to dashboard</a></div>
+</section></main>
+{% endblock %}

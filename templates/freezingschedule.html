@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% block title %}ACCEM | Freezing schedule{% endblock %}
+{% block content %}
+<main class="portal-page">
+  <section class="page-content">
+    <header class="page-header page-header--portal page-header--schedule">
+      <div>
+        <div class="eyebrow">User portal</div>
+        <h1>Freezing schedule</h1>
+        <p>Current cryo-grid preparation bookings and recently completed slots.</p>
+      </div>
+    </header>
+
+    <div class="data-stack">
+      <section class="data-panel">
+        <h2>Active slots</h2>
+        {% if active_slots %}
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Position</th>
+                  <th>Name of User</th>
+                  <th>Name of PI</th>
+                  <th>Origin</th>
+                  <th>Registered At</th>
+                  <th>Number of Grids</th>
+                  <th>Date for Freezing</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for slot in active_slots %}
+                  <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ slot.user_name }}</td>
+                    <td>{{ slot.pi_name }}</td>
+                    <td>{{ slot.origin if slot.origin else slot.esm }}</td>
+                    <td>{{ slot.registered_at[:10] if slot.registered_at and slot.registered_at is string else slot.registered_at.strftime('%Y-%m-%d') if slot.registered_at else '' }}</td>
+                    <td>{{ slot.grids }}</td>
+                    <td>{{ slot.freezing_date }}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          <div class="empty-message">No active freezing slots at the moment.</div>
+        {% endif %}
+      </section>
+
+      <section class="data-panel" id="history">
+        <h2>History</h2>
+        {% if completed_slots %}
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Position</th>
+                  <th>Name of User</th>
+                  <th>Name of PI</th>
+                  <th>Origin</th>
+                  <th>Grids</th>
+                  <th>Date for Freezing</th>
+                  <th>Completed At</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for slot in completed_slots %}
+                  <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ slot.user_name }}</td>
+                    <td>{{ slot.pi_name }}</td>
+                    <td>{{ slot.origin if slot.origin else slot.esm }}</td>
+                    <td>{{ slot.grids }}</td>
+                    <td>{{ slot.freezing_date }}</td>
+                    <td>{{ slot.completed_at[:10] if slot.completed_at and slot.completed_at is string else slot.completed_at.strftime('%Y-%m-%d') if slot.completed_at else '' }}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          <div class="empty-message">No recently completed freezing slots.</div>
+        {% endif %}
+      </section>
+    </div>
+  </section>
+  <div class="success-modal" id="success-modal" data-success-type="Freezing">
+    <div class="success-modal__content" role="dialog" aria-modal="true" aria-labelledby="success-modal-title">
+      <div class="success-modal__icon">✓</div>
+      <h3 id="success-modal-title">Registration successful</h3>
+      <p>Registration for <strong>Freezing</strong> has been completed successfully.</p>
+      <button type="button" class="primary-btn" onclick="document.getElementById('success-modal').classList.remove('show')">Continue</button>
+    </div>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const modal = document.getElementById('success-modal');
+      const params = new URLSearchParams(window.location.search);
+      if ((window.location.hash === '#history' || params.get('success')) && modal) {
+        modal.classList.add('show');
+      }
+    });
+  </script>
+</main>
+{% endblock %}

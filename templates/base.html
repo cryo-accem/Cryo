@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/site.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <title>{% block title %}ACCEM | Cryo-Electron Microscopy{% endblock %}</title>
+</head>
+<body>
+<div class="site-shell">
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="{{ url_for('public.home') }}">
+        <img class="brand-mark" src="{{ url_for('static', filename='images/iisc_logo.png') }}" alt="Indian Institute of Science">
+        <span><strong>ACCEM</strong><small>Advanced Centre for<br>Cryo-Electron Microscopy</small></span>
+      </a>
+      <nav class="site-nav" aria-label="Primary navigation">
+        <a href="{{ url_for('public.home') }}">Home</a>
+        <a href="{{ url_for('public.about') }}">About</a>
+        <a href="{{ url_for('public.facility') }}">Facility</a>
+        <a href="{{ url_for('public.equipments') }}">Equipments</a>
+        <a href="{{ url_for('public.workflow') }}">Workflow</a>
+        <a href="{{ url_for('public.publications') }}">Publications</a>
+        <a href="{{ url_for('public.events') }}">Events</a>
+        <a href="{{ url_for('public.team') }}">Team</a>
+        <a class="portal-link" href="{{ url_for('register.register') }}">Book slots</a>
+      </nav>
+    </div>
+  </header>
+  {% block content %}{% endblock %}
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div><h3>ACCEM</h3><p>Advanced Centre for Cryo-Electron Microscopy<br>Indian Institute of Science, Bengaluru</p></div>
+      <div><h3>Contact</h3><p>cryoem.iisc@gmail.com<br>somnath@iisc.ac.in</p></div>
+      <div><h3>Quick links</h3><a href="{{ url_for('public.facility') }}">Facility</a><a href="{{ url_for('public.equipments') }}">Equipments</a><a href="{{ url_for('public.publications') }}">Publications</a><a href="{{ url_for('public.events') }}">Events</a></div>
+      <div><h3>Connect</h3><a href="{{ url_for('register.register') }}">Register for a slot</a><a href="{{ url_for('imaging.list_view') }}">Data collection schedule</a></div>
+    </div>
+    <div class="copyright">Copyright © 2026 Advanced Centre for Cryo-Electron Microscopy (ACCEM), IISc. All Rights Reserved.</div>
+  </footer>
+</div>
+</body>
+</html>

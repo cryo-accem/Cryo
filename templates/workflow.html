@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}ACCEM | Cryo-EM Workflow{% endblock %}
+{% block content %}
+<main>
+  <section class="workflow-page">
+    <header class="page-header page-header--workflow">
+      <div>
+        <div class="eyebrow">How we work</div>
+        <h1>Cryo-EM workflow</h1>
+        <p>From sample preparation to structure determination, our team supports every stage of your project.</p>
+      </div>
+    </header>
+    <div class="workflow-intro">
+      <div>
+        <div class="eyebrow">ACCEM process</div>
+        <h2>A clear path from sample to structure</h2>
+        <p>Each project is planned with the facility team to protect sample quality, use microscope time efficiently, and deliver reliable structural data.</p>
+      </div>
+      <a class="button" href="{{ url_for('register.register') }}">Start a request</a>
+    </div>
+    <div class="workflow-timeline">
+      <article class="workflow-stage">
+        <div class="stage-marker">01</div>
+        <div class="stage-image"><img src="{{ url_for('static', filename='images/sample-submission.png') }}" alt="Biological sample"></div>
+        <div class="stage-copy"><div class="eyebrow">Step one</div><h2>Sample submission</h2><p>Share your sample details, purification data, buffer conditions, and the experiment you want to perform. The facility team reviews suitability before scheduling.</p><span class="stage-tag">Planning &amp; consultation</span></div>
+      </article>
+      <article class="workflow-stage">
+        <div class="stage-marker">02</div>
+        <div class="stage-image"><img src="{{ url_for('static', filename='images/fei_vitrobot.png') }}" alt="Grid freezing"></div>
+        <div class="stage-copy"><div class="eyebrow">Step two</div><h2>Grid freezing</h2><p>Samples are vitrified on EM grids using controlled temperature, humidity, blotting, and plunge-freezing conditions.</p><span class="stage-tag">Vitrification</span></div>
+      </article>
+      <article class="workflow-stage">
+        <div class="stage-marker">03</div>
+        <div class="stage-image"><img src="{{ url_for('static', filename='images/sample.jpg') }}" alt="Grid clipping and insertion"></div>
+        <div class="stage-copy"><div class="eyebrow">Step three</div><h2>Grid clipping and insertion</h2><p>Vitrified grids are clipped, inspected, and carefully inserted into cartridges for safe transfer to the microscope.</p><span class="stage-tag">Grid handling</span></div>
+      </article>
+      <article class="workflow-stage">
+        <div class="stage-marker">04</div>
+        <div class="stage-image"><img src="{{ url_for('static', filename='images/data-collection-workflow.png') }}" alt="Grid screening"></div>
+        <div class="stage-copy"><div class="eyebrow">Step four</div><h2>Grid screening</h2><p>Grids are screened to assess ice thickness, particle distribution, aggregation, and sample quality before high-resolution collection.</p><span class="stage-tag">Quality check</span></div>
+      </article>
+      <article class="workflow-stage">
+        <div class="stage-marker">05</div>
+        <div class="stage-image"><img src="{{ url_for('static', filename='images/grid-screening.png') }}" alt="Cryo-EM data collection"></div>
+        <div class="stage-copy"><div class="eyebrow">Step five</div><h2>Data collection</h2><p>High-resolution movies are acquired on the 200 kV Talos Arctica using dose-fractionation and the Gatan K2 direct electron detector.</p><span class="stage-tag">Microscope session</span></div>
+      </article>
+      <article class="workflow-stage">
+        <div class="stage-marker">06</div>
+        <div class="stage-image"><img src="{{ url_for('static', filename='images/data-processing.png') }}" alt="Image processing"></div>
+        <div class="stage-copy"><div class="eyebrow">Step six</div><h2>Data processing</h2><p>Movies are transferred securely for motion correction, CTF estimation, particle picking, classification, and reconstruction workflows.</p><span class="stage-tag">Computing &amp; analysis</span></div>
+      </article>
+      <article class="workflow-stage">
+        <div class="stage-marker">07</div>
+        <div class="stage-image"><img src="{{ url_for('static', filename='images/cryo-em_workstation.png') }}" alt="Structure determination"></div>
+        <div class="stage-copy"><div class="eyebrow">Step seven</div><h2>Structure determination</h2><p>Refinement and interpretation lead to a high-resolution 3D structure and the scientific insight your project set out to discover.</p><span class="stage-tag">Final structure</span></div>
+      </article>
+    </div>
+  </section>
+</main>
+{% endblock %}

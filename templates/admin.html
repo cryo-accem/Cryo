@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}ACCEM | Admin login{% endblock %}
+{% block content %}
+<main class="portal-page"><section class="page-content">
+  <header class="page-header page-header--admin"><div><div class="eyebrow">Administration</div><h1>Admin login</h1><p>Sign in to manage facility bookings and schedules.</p></div></header>
+  <div class="form-card">
+    {% with messages = get_flashed_messages() %}{% if messages %}{% for message in messages %}<div class="alert">{{ message }}</div>{% endfor %}{% endif %}{% endwith %}
+    <form action="{{ url_for('admin.login') }}" method="post">
+      <div class="form-grid"><div class="form-field full"><label for="username">Username</label><input type="text" id="username" name="username" required></div><div class="form-field full"><label for="password">Password</label><input type="password" id="password" name="password" required></div></div>
+      <div class="form-actions"><button type="submit" class="button">Login</button></div>
+    </form>
+  </div>
+</section></main>
+{% endblock %}

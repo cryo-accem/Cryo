@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}ACCEM | Advanced Centre for Cryo-Electron Microscopy{% endblock %}
+{% block content %}
+<main>
+  <section class="hero">
+    <img class="hero-image" src="{{ url_for('static', filename='images/talos_arctica.png') }}" alt="Talos Arctica cryo-electron microscope">
+    <div class="hero-copy">
+      <div class="eyebrow">Indian Institute of Science · Bengaluru</div>
+      <h1>Advanced Centre for Cryo-Electron Microscopy</h1>
+      <p>Exploring biological structure at the molecular scale. A dedicated cryo-EM facility enabling high-resolution data collection and structural analysis.</p>
+      <div class="hero-actions">
+        <a class="button outline" href="{{ url_for('public.equipments') }}">Explore the facility</a>
+        <a class="button" href="{{ url_for('register.register') }}">Submit a sample</a>
+      </div>
+    </div>
+  </section>
+  <section class="section workflow-section">
+    <div class="section-heading"><h2>View the complete cryo-EM workflow</h2><a class="section-link" href="{{ url_for('public.workflow') }}">Explore workflow details →</a></div>
+    <div class="workflow">
+      <div class="step"><span class="step-number">01</span><img src="{{ url_for('static', filename='images/sample-submission.png') }}" alt="Sample"><strong>Sample</strong><span>Submit your sample</span></div>
+      <div class="step"><span class="step-number">02</span><img src="{{ url_for('static', filename='images/fei_vitrobot.png') }}" alt="Grid freezing"><strong>Grid freezing</strong><span>Vitrify the sample</span></div>
+      <div class="step"><span class="step-number">03</span><img src="{{ url_for('static', filename='images/grid-clipping.png') }}" alt="Grid clipping"><strong>Grid clipping</strong><span>Clip and insert grids</span></div>
+      <div class="step"><span class="step-number">04</span><img src="{{ url_for('static', filename='images/grid-screening.png') }}" alt="Grid screening"><strong>Screening</strong><span>Check grid quality</span></div>
+      <div class="step"><span class="step-number">05</span><img src="{{ url_for('static', filename='images/data-collection.png') }}" alt="Data collection"><strong>Data collection</strong><span>Acquire cryo-EM data</span></div>
+      <div class="step"><span class="step-number">06</span><img src="{{ url_for('static', filename='images/cryo-em_workstation.png') }}" alt="Structural analysis"><strong>Structural analysis</strong><span>Build the structure</span></div>
+    </div>
+  </section>
+  <section class="section glance">
+    <div class="section-heading"><h2>Our facility at a glance</h2><p>Expertise, instrumentation and support for every project.</p></div>
+    <div class="card-grid">
+      <article class="info-card"><i class="fa-solid fa-microscope"></i><h3>Advanced instrumentation</h3><p>Talos Arctica 200 kV cryo-TEM with direct electron detection.</p><a href="{{ url_for('public.equipments') }}">Learn more →</a></article>
+      <article class="info-card"><i class="fa-solid fa-snowflake"></i><h3>Sample preparation</h3><p>Dedicated infrastructure for cryo-grid preparation and verification.</p><a href="{{ url_for('public.equipments') }}">Learn more →</a></article>
+      <article class="info-card"><i class="fa-solid fa-users"></i><h3>Expert support</h3><p>Experienced team to support your experiments at every step.</p><a href="{{ url_for('public.team') }}">Meet the team →</a></article>
+      <article class="info-card"><i class="fa-solid fa-server"></i><h3>Data & computing</h3><p>High-performance computing and secure storage for efficient analysis.</p><a href="{{ url_for('public.facility') }}">Learn more →</a></article>
+    </div>
+  </section>
+  <section class="section portal">
+    <div class="section-heading"><h2>User portal</h2><p>Access schedules and manage your requests.</p></div>
+    <div class="portal-grid">
+      <a class="portal-card" href="{{ url_for('register.register') }}"><i class="fa-solid fa-clipboard"></i><strong>Slot registration</strong><span>Register your request for a slot →</span></a>
+      <a class="portal-card" href="{{ url_for('freezing.freezing_schedule') }}"><i class="fa-solid fa-snowflake"></i><strong>Freezing schedule</strong><span>View and request freezing slots →</span></a>
+      <a class="portal-card" href="{{ url_for('screening.screening_list') }}"><i class="fa-solid fa-magnifying-glass"></i><strong>Screening schedule</strong><span>View screening availability →</span></a>
+      <a class="portal-card" href="{{ url_for('imaging.list_view') }}"><i class="fa-solid fa-calendar-days"></i><strong>Data collection schedule</strong><span>Check microscope availability →</span></a>
+    </div>
+  </section>
+</main>
+{% endblock %}

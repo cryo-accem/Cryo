@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}ACCEM | Community gallery{% endblock %}
+{% block content %}
+<main>
+  <section class="page-content">
+    <header class="page-header page-header--events">
+      <div><div class="eyebrow">ACCEM community</div><h1>Community gallery</h1><p>Snapshots from facility demonstrations, training sessions and cryo-EM work at ACCEM.</p></div>
+    </header>
+    <section class="gallery-section">
+      <div class="section-heading"><h2>Inside the facility</h2><p>Explore the people, instruments and workflows that support our research community.</p></div>
+      <div class="community-gallery">
+        <figure><img src="{{ url_for('static', filename='images/school-outreach-iisc.png') }}" alt="School Outreach Program at IISc"><figcaption>School Outreach Program at IISc</figcaption></figure>
+        <figure><img src="{{ url_for('static', filename='images/pre-workshop-conference-embo.png') }}" alt="Pre-Workshop Conference during EMBO (CEM3DIP)"><figcaption>Pre-Workshop Conference during EMBO (CEM3DIP)</figcaption></figure>
+        <figure><img src="{{ url_for('static', filename='images/practical-demonstration-cce.png') }}" alt="Practical Demonstration during CCE Course"><figcaption>Practical Demonstration during CCE Course</figcaption></figure>
+        <figure><img src="{{ url_for('static', filename='images/school-outreach-iisc-2.png') }}" alt="School Outreach Program at IISc"><figcaption>School Outreach Program at IISc</figcaption></figure>
+        <figure><img src="{{ url_for('static', filename='images/school-outreach-iisc-3.jpe') }}" alt="School Outreach program"><figcaption>School Outreach program</figcaption></figure>
+        <figure><img src="{{ url_for('static', filename='images/practical-training-program.png') }}" alt="Practical Training Program"><figcaption>Practical Training Program</figcaption></figure>
+      </div>
+    </section>
+  </section>
+</main>
+{% endblock %}

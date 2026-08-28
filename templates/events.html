@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}ACCEM | Events & Training{% endblock %}
+{% block content %}
+<main>
+  <section class="page-content">
+    <header class="page-header page-header--events">
+      <div><div class="eyebrow">Learning and outreach</div><h1>Events &amp; Training</h1><p>Workshops, conferences and cryo-EM learning opportunities from the ACCEM community.</p></div>
+    </header>
+
+    <section class="events-section">
+      <div class="section-heading"><h2>Workshops &amp; conferences</h2><p>Highlights from meetings, demonstrations and hands-on sessions.</p></div>
+      <div class="event-gallery">
+        <a class="event-photo" href="https://meetings.embo.org/event/24-cryo-em" target="_blank" rel="noopener"><img src="{{ url_for('static', filename='images/hands-on-cryo-em-training.png') }}" alt="Cryo electron microscopy and 3D image processing (CEM3DIP) - 2024"><div><span>Workshop</span><h3>Cryo electron microscopy and 3D image processing (CEM3DIP) - 2024</h3><p>Practical sessions covering sample preparation, grid screening and microscope workflows.</p></div></a>
+        <a class="event-photo" href="https://www.emsi.org.in/" target="_blank" rel="noopener"><img class="conference-image" src="{{ url_for('static', filename='images/electron-microscopy-conference.png') }}" alt="EMSI Conference - 2025"><div><span>Conference</span><h3>EMSI Conference - 2025</h3><p>Scientific exchange on new methods, applications and discoveries enabled by cryo-EM.</p></div></a>
+        <a class="event-photo" href="{{ url_for('public.community_gallery') }}"><img class="community-welfare-image" src="{{ url_for('static', filename='images/community-welfare-program.png') }}" alt="Community Welfare Programs"><div><span>Community</span><h3>Community Welfare Programs</h3><p>Meet the team, explore the instrumentation and learn how to plan a successful project.</p></div></a>
+      </div>
+    </section>
+
+    <section class="events-section course-section">
+      <div class="section-heading"><h2>Courses &amp; workshops</h2><p>Build foundational knowledge and practical confidence in cryo-electron microscopy.</p></div>
+      <div class="course-grid">
+        <a class="course-card course-card-link" href="https://nptel.ac.in/courses/102108668" target="_blank" rel="noopener"><div class="course-icon"><i class="fa-solid fa-graduation-cap"></i></div><span class="course-tag">NPTEL · Online course</span><h3>Fundamentals of Cryo-Electron Microscopy (Cryo-EM) and 3D Image Processing in Structural Biology</h3><p>Learn the principles of electron microscopy, vitrification, imaging, single-particle analysis and structure validation.</p><span class="course-card-cta">Explore NPTEL courses →</span></a>
+        <article class="course-card"><div class="course-icon"><i class="fa-solid fa-users"></i></div><span class="course-tag">CCE · Hands-on workshop</span><h3>CCE Cryo-EM workshops</h3><p>Short-format training for researchers covering sample preparation, grid screening, data collection and processing workflows.</p><a href="https://cce.iisc.ac.in/" target="_blank" rel="noopener">Enquire about workshops →</a></article>
+      </div>
+    </section>
+  </section>
+</main>
+{% endblock %}

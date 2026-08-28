@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}ACCEM | Team{% endblock %}
+{% block content %}
+<main>
+  <section class="page-content">
+    <header class="page-header page-header--team"><div><div class="eyebrow">People</div><h1>Our team</h1><p>The core team provides cryo-EM services and supports users throughout their projects.</p></div></header>
+    <div class="team-grid">
+      <article class="team-card"><div class="team-photo"><img src="{{ url_for('static', filename='images/Somnath.png') }}" alt="Somnath Dutta"><span class="team-status">FACULTY IN-CHARGE</span></div><div class="team-details"><span class="team-role">Scientific leadership</span><strong>Dr. Somnath Dutta</strong><span>MBU, Indian Institute of Science<br>Bengaluru, India</span><a class="team-email" href="mailto:somnath@iisc.ac.in"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span>somnath@iisc.ac.in</span></a></div></article>
+      <article class="team-card"><div class="team-photo"><img src="{{ url_for('static', filename='images/Drose.png') }}" alt="Drose"><span class="team-status">EM MANAGER</span></div><div class="team-details"><span class="team-role">Facility operations</span><strong>Mr. Drose Ignatious Shane</strong><span>MBU, Indian Institute of Science<br>Bengaluru, India</span><a class="team-email" href="mailto:cryoem.iisc@gmail.com"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span>cryoem.iisc@gmail.com</span></a></div></article>
+    </div>
+    <div class="advisory">
+      <div class="advisory-heading"><span class="advisory-icon"><i class="fa-solid fa-shield-halved"></i></span><div><h2>Scientific Advisory Committee</h2><p>Guidance from leading researchers across structural biology and materials science.</p></div></div>
+      <div class="advisory-list">
+        <p><strong>Dr. Somnath Dutta</strong><span>Associate Professor · Molecular Biophysics Unit, IISc</span></p>
+        <p><strong>Dr. Siddhartha P. Sarma</strong><span>Professor · Molecular Biophysics Unit, IISc</span></p>
+        <p><strong>Dr. Raghavan Varadarajan</strong><span>Professor · Molecular Biophysics Unit, IISc</span></p>
+        <p><strong>Dr. Vinothkumar Kutti Ragunath</strong><span>Assistant Professor · NCBS, Bengaluru</span></p>
+        <p><strong>Dr. Vidya Mangala Prasad</strong><span>Assistant Professor · Molecular Biophysics Unit, IISc</span></p>
+        <p><strong>Dr. N. Ravishankar</strong><span>Professor · Materials Research Centre, IISc</span></p>
+      </div>
+    </div>
+    <div class="notice team-ack"><span>Developed and Maintained by</span><strong>New Star Infosis Team</strong></div>
+  </section>
+</main>
+{% endblock %}

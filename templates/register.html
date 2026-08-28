@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block title %}ACCEM | Register{% endblock %}
+{% block content %}
+<main class="portal-page">
+  <section class="page-content">
+    <header class="page-header page-header--portal"><div><div class="eyebrow">User portal</div><h1>Register for a Cryo-EM slot</h1><p>Tell us about your sample and preferred service. The facility team will follow up by email.</p></div></header>
+    <div class="form-card">
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}<div class="flash">{% for msg in messages %}<p>{{ msg }}</p>{% endfor %}</div>{% endif %}
+      {% endwith %}
+      <form action="{{ url_for('register.register') }}" method="post">
+        <input type="hidden" id="reg_type" name="reg_type" required>
+        <div class="form-field full">
+          <label>Registration Type</label>
+          <div class="reg-type-grid" role="listbox" aria-label="Registration Type">
+            <button type="button" class="reg-type-card" data-value="freezing" aria-label="Freezing">
+              <i class="fa-solid fa-snowflake"></i>
+              <span>Freezing</span>
+            </button>
+            <button type="button" class="reg-type-card" data-value="screening" aria-label="Screening">
+              <i class="fa-solid fa-microscope"></i>
+              <span>Screening</span>
+            </button>
+            <button type="button" class="reg-type-card" data-value="datacollecting" aria-label="Data Collecting">
+              <i class="fa-solid fa-database"></i>
+              <span>Data Collecting</span>
+            </button>
+          </div>
+        </div>
+        <div class="form-grid">
+          <div class="form-field"><label for="user_name">Name of the User</label><input type="text" id="user_name" name="user_name" required></div>
+          <div class="form-field"><label for="pi_name">Name of PI (Principal Investigator)</label><input type="text" id="pi_name" name="pi_name" required></div>
+          <div class="form-field"><label for="email">Email Address</label><input type="email" id="email" name="email" required></div>
+          <div class="form-field"><label for="origin">Origin of the User</label><select id="origin" name="origin" required onchange="toggleEsmField()"><option value="">Select origin</option><option value="Internal">Internal User</option><option value="External">External User</option><option value="Industry">Industry User</option></select></div>
+          <div class="form-field hidden" id="esm_field"><label for="esm">Institute Name</label><input type="text" id="esm" name="esm"></div>
+          <div class="form-field full"><label for="sample_name">Name of the Sample</label><input type="text" id="sample_name" name="sample_name" required></div>
+          <div id="imaging_fields" class="form-grid full">
+            <div class="form-field"><label for="grids">How Many Grids (Maximum 4)</label><input type="number" id="grids" name="grids" min="1" max="4"></div>
+            <div class="form-field"><label for="days">How Many Days Required (Maximum 4)</label><input type="number" id="days" name="days" min="1" max="4"></div>
+          </div>
+          <div id="freezing_fields" class="form-grid full">
+            <div class="form-field"><label for="freezing_date">Date for Registration</label><input type="date" id="freezing_date" name="freezing_date"></div>
+            <div class="form-field"><label for="grids_freezing">How Many Grids (Maximum 8)</label><input type="number" id="grids_freezing" name="grids_freezing" min="1" max="8"></div>
+          </div>
+        </div>
+        <div class="form-actions"><button type="reset" class="button muted">Clear</button><button type="submit" class="button">Submit request</button></div>
+      </form>
+    </div>
+  </section>
+</main>
+<script>
+function toggleEsmField() {
+  const origin = document.getElementById('origin').value;
+  const field = document.getElementById('esm_field');
+  const label = document.querySelector('#esm_field label');
+  const input = document.getElementById('esm');
+
+  const showField = origin === 'External' || origin === 'Industry';
+  field.classList.toggle('hidden', !showField);
+  input.required = showField;
+  label.textContent = origin === 'Industry' ? 'Industry Name' : 'Institute Name';
+}
+function setRegType(type) {
+  const hidden = document.getElementById('reg_type');
+  const cards = document.querySelectorAll('.reg-type-card');
+  hidden.value = type;
+  cards.forEach(card => {
+    const active = card.dataset.value === type;
+    card.classList.toggle('selected', active);
+    card.setAttribute('aria-selected', active ? 'true' : 'false');
+  });
+  toggleRegType();
+}
+function toggleRegType() {
+  const type = document.getElementById('reg_type').value;
+  const imaging = type === 'datacollecting' || type === 'screening';
+  document.getElementById('imaging_fields').classList.toggle('hidden', !imaging);
+  document.getElementById('freezing_fields').classList.toggle('hidden', type !== 'freezing');
+  document.getElementById('grids').required = imaging;
+  document.getElementById('days').required = imaging;
+  document.getElementById('freezing_date').required = type === 'freezing';
+  document.getElementById('grids_freezing').required = type === 'freezing';
+}
+document.querySelectorAll('.reg-type-card').forEach(card => {
+  card.addEventListener('click', () => setRegType(card.dataset.value));
+});
+toggleRegType(); toggleEsmField();
+</script>
+{% endblock %}
