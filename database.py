@@ -10,6 +10,41 @@ DEFAULT_SQLITE_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "
 DATABASE_URL = os.environ.get("DATABASE_URL") or f"sqlite:///{DEFAULT_SQLITE_PATH}"
 
 
+def _convert_sqlite_placeholders(query):
+    """Convert ? placeholders without changing quoted SQL text."""
+    converted = []
+    quote = None
+    index = 0
+
+    while index < len(query):
+        character = query[index]
+
+        if quote:
+            converted.append(character)
+            if character == quote:
+                if index + 1 < len(query) and query[index + 1] == quote:
+                    converted.append(query[index + 1])
+                    index += 1
+                else:
+                    quote = None
+        elif character in ("'", '"', "`"):
+            quote = character
+            converted.append(character)
+        elif character == "?":
+            converted.append("%s")
+        else:
+            converted.append(character)
+
+        index += 1
+
+    return "".join(converted)
+
+
+class MySQLDictCursor(pymysql.cursors.DictCursor):
+    def execute(self, query, args=None):
+        return super().execute(_convert_sqlite_placeholders(query), args)
+
+
 def _is_sqlite_url():
     return urllib.parse.urlparse(DATABASE_URL).scheme == "sqlite"
 
@@ -49,7 +84,7 @@ def get_db():
         database=database,
         port=url.port or 3306,
         ssl={"ssl": {}},
-        cursorclass=pymysql.cursors.DictCursor,
+        cursorclass=MySQLDictCursor,
     )
 
 
