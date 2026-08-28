@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <title>{% block title %}ACCEM | Cryo-Electron Microscopy{% endblock %}</title>
 </head>
-<body>
+<body class="{% if request.path.startswith('/admin') and request.path != '/admin/' %}admin-area{% endif %}">
 <div class="site-shell">
   <header class="site-header">
     <div class="header-inner">
@@ -18,6 +18,9 @@
         <img class="brand-mark" src="{{ url_for('static', filename='images/iisc_logo.png') }}" alt="Indian Institute of Science">
         <span><strong>ACCEM</strong><small>Advanced Centre for<br>Cryo-Electron Microscopy</small></span>
       </a>
+      {% if request.path.startswith('/admin') and request.path != '/admin/' %}
+      <div class="admin-header-context"><span>ACCEM</span><small>Admin workspace</small></div>
+      {% else %}
       <nav class="site-nav" aria-label="Primary navigation">
         <a href="{{ url_for('public.home') }}">Home</a>
         <a href="{{ url_for('public.about') }}">About</a>
@@ -29,9 +32,26 @@
         <a href="{{ url_for('public.team') }}">Team</a>
         <a class="portal-link" href="{{ url_for('register.register') }}">Book slots</a>
       </nav>
+      {% endif %}
     </div>
   </header>
+  {% if request.path.startswith('/admin') and request.path != '/admin/' %}
+  <aside class="admin-sidebar" aria-label="Admin navigation">
+    <div class="admin-sidebar__identity"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i><div><strong>ACCEM Admin</strong><small>Facility operations</small></div></div>
+    <div class="admin-sidebar__label">Overview</div>
+    <nav>
+      <a class="{% if request.path == '/admin/panel' %}active{% endif %}" href="{{ url_for('admin.panel') }}"><i class="fa-solid fa-table-cells-large" aria-hidden="true"></i><span>Dashboard</span></a>
+      <div class="admin-sidebar__label">Operations</div>
+      <a class="{% if request.path.startswith('/admin/datacollecting') %}active{% endif %}" href="{{ url_for('admin.datacollecting') }}"><i class="fa-solid fa-database" aria-hidden="true"></i><span>Data collecting</span></a>
+      <a class="{% if request.path.startswith('/admin/screening') %}active{% endif %}" href="{{ url_for('admin.screening_admin') }}"><i class="fa-solid fa-microscope" aria-hidden="true"></i><span>Screening</span></a>
+      <a class="{% if request.path.startswith('/admin/freezing') %}active{% endif %}" href="{{ url_for('admin.freezing_admin') }}"><i class="fa-solid fa-snowflake" aria-hidden="true"></i><span>Freezing</span></a>
+      <a class="{% if request.path.startswith('/admin/history') %}active{% endif %}" href="{{ url_for('admin.history') }}"><i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i><span>History</span></a>
+    </nav>
+    <a class="admin-sidebar__logout" href="{{ url_for('admin.logout') }}"><i class="fa-solid fa-arrow-right-from-bracket" aria-hidden="true"></i><span>Logout</span></a>
+  </aside>
+  {% endif %}
   {% block content %}{% endblock %}
+  {% if not request.path.startswith('/admin') or request.path == '/admin/' %}
   <footer class="site-footer">
     <div class="footer-grid">
       <div><h3>ACCEM</h3><p>Advanced Centre for Cryo-Electron Microscopy<br>Indian Institute of Science, Bengaluru</p></div>
@@ -41,6 +61,42 @@
     </div>
     <div class="copyright">Copyright © 2026 Advanced Centre for Cryo-Electron Microscopy (ACCEM), IISc. All Rights Reserved.</div>
   </footer>
+  {% endif %}
 </div>
+{% if request.path.startswith('/admin') and request.path != '/admin/' %}
+<script>
+document.querySelectorAll('[data-donut]').forEach((donut) => {
+  const tooltip = donut.querySelector('.donut-tooltip');
+  donut.querySelectorAll('.donut-segment').forEach((segment) => {
+    const showTooltip = () => {
+      tooltip.innerHTML = `${segment.dataset.label}<br><strong>${segment.dataset.value}</strong>`;
+      tooltip.classList.add('is-visible');
+    };
+    const hideTooltip = () => tooltip.classList.remove('is-visible');
+    segment.addEventListener('mouseenter', showTooltip);
+    segment.addEventListener('mouseleave', hideTooltip);
+    segment.addEventListener('focus', showTooltip);
+    segment.addEventListener('blur', hideTooltip);
+  });
+});
+document.querySelectorAll('[data-admin-filter]').forEach((filter) => {
+  const scope = filter.closest('.data-stack');
+  const search = filter.querySelector('[data-table-search]');
+  const origin = filter.querySelector('[data-origin-filter]');
+  const rows = scope ? scope.querySelectorAll('.data-table tbody tr') : [];
+  const applyFilters = () => {
+    const query = (search?.value || '').trim().toLowerCase();
+    const selectedOrigin = (origin?.value || '').toLowerCase();
+    rows.forEach((row) => {
+      const matchesText = !query || row.textContent.toLowerCase().includes(query);
+      const matchesOrigin = !selectedOrigin || (row.dataset.origin || '').toLowerCase() === selectedOrigin;
+      row.hidden = !(matchesText && matchesOrigin);
+    });
+  };
+  search?.addEventListener('input', applyFilters);
+  origin?.addEventListener('change', applyFilters);
+});
+</script>
+{% endif %}
 </body>
 </html>

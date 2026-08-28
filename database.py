@@ -2,8 +2,12 @@ import os
 import sqlite3
 import urllib.parse
 
+from dotenv import load_dotenv
+
 import pymysql
 import pymysql.cursors
+
+load_dotenv()
 
 
 DEFAULT_SQLITE_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "preview.db")
@@ -279,6 +283,10 @@ def init_db():
             )
         """)
 
+    _add_completion_columns(cur, "bookings")
+    _add_completion_columns(cur, "screening_bookings")
+    _add_completion_columns(cur, "completed_freezing")
+
     # ── Remove any UNIQUE index on email in bookings & screening_bookings ────
     # Uses information_schema so it finds the real index name on Aiven.
     # Completely safe — if no unique index exists, nothing happens.
@@ -288,3 +296,79 @@ def init_db():
     conn.commit()
     cur.close()
     conn.close()
+
+
+def _add_completion_columns(cur, table: str):
+    """Add billing fields without changing existing requested booking values."""
+    if _is_sqlite_url():
+        cur.execute(f"PRAGMA table_info({table})")
+        existing = {row["name"] for row in cur.fetchall()}
+        column_types = {
+            "actual_slots": "NUMERIC",
+            "actual_grids": "INTEGER",
+            "slot_charge": "NUMERIC",
+            "freezing_charge": "NUMERIC",
+            "clipping_charge": "NUMERIC",
+            "processing_charge": "NUMERIC",
+            "gst_amount": "NUMERIC",
+            "total_billed": "NUMERIC",
+            "processing_requested": "INTEGER NOT NULL DEFAULT 0",
+        }
+    else:
+        cur.execute(
+            "SELECT COLUMN_NAME FROM information_schema.COLUMNS "
+            "WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME=%s",
+            [table],
+        )
+        existing = {row["COLUMN_NAME"] for row in cur.fetchall()}
+        column_types = {
+            "actual_slots": "DECIMAL(12,3)",
+            "actual_grids": "INT",
+            "slot_charge": "DECIMAL(12,2)",
+            "freezing_charge": "DECIMAL(12,2)",
+            "clipping_charge": "DECIMAL(12,2)",
+            "processing_charge": "DECIMAL(12,2)",
+            "gst_amount": "DECIMAL(12,2)",
+            "total_billed": "DECIMAL(12,2)",
+            "processing_requested": "BOOLEAN NOT NULL DEFAULT FALSE",
+        }
+
+    for column, column_type in column_types.items():
+        if column not in existing:
+            cur.execute(f"ALTER TABLE {table} ADD COLUMN {column} {column_type}")
+
+    payment_columns = {
+        "charge_sheet_sent_at": "TIMESTAMP",
+        "payment_status": "TEXT DEFAULT 'Payment Pending'",
+        "transaction_reference": "TEXT",
+        "transaction_date": "DATE",
+        "amount_received": "NUMERIC",
+        "payment_mode": "TEXT",
+        "proof_received_date": "DATE",
+        "payment_proof_path": "TEXT",
+        "payment_proof_original_name": "TEXT",
+        "admin_remarks": "TEXT",
+        "debit_head_details": "TEXT",
+        "debit_head_status": "TEXT DEFAULT 'Debit Head Pending'",
+        "pi_email": "VARCHAR(150)",
+    }
+    if not _is_sqlite_url():
+        payment_columns = {
+            "charge_sheet_sent_at": "TIMESTAMP NULL",
+            "payment_status": "VARCHAR(40) DEFAULT 'Payment Pending'",
+            "transaction_reference": "VARCHAR(150)",
+            "transaction_date": "DATE NULL",
+            "amount_received": "DECIMAL(12,2) NULL",
+            "payment_mode": "VARCHAR(80)",
+            "proof_received_date": "DATE NULL",
+            "payment_proof_path": "VARCHAR(255)",
+            "payment_proof_original_name": "VARCHAR(255)",
+            "admin_remarks": "TEXT",
+            "debit_head_details": "TEXT",
+            "debit_head_status": "VARCHAR(40) DEFAULT 'Debit Head Pending'",
+            "pi_email": "VARCHAR(150)",
+        }
+
+    for column, column_type in payment_columns.items():
+        if column not in existing:
+            cur.execute(f"ALTER TABLE {table} ADD COLUMN {column} {column_type}")

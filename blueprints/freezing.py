@@ -2,10 +2,39 @@ import datetime
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from database import get_db
 from extensions import send_email
+from revenue import FREEZING_RATE
 
 freezing_bp = Blueprint("freezing", __name__)
 
 GRID_LIMIT_PER_DAY = 8
+
+
+def complete_freezing_booking(cur, booking_id, actual_grids):
+    """Complete one freezing booking using the grids actually frozen."""
+    cur.execute(
+        "SELECT * FROM freezing_bookings WHERE id=? AND status='active'",
+        [booking_id],
+    )
+    booking = cur.fetchone()
+    if not booking:
+        return None
+    freezing_charge = FREEZING_RATE * actual_grids
+    cur.execute(
+        """INSERT INTO completed_freezing
+           (user_name, pi_name, email, origin, sample_name, grids, freezing_date,
+            actual_grids, slot_charge, freezing_charge, clipping_charge,
+            processing_charge, gst_amount, total_billed, processing_requested)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 0, 0, ?, 0)""",
+        (booking["user_name"], booking["pi_name"], booking["email"],
+         booking["origin"], booking["sample_name"], booking["grids"],
+         booking["freezing_date"], actual_grids, 0, freezing_charge,
+         freezing_charge),
+    )
+    cur.execute(
+        "UPDATE freezing_bookings SET status='completed' WHERE id=?",
+        [booking_id],
+    )
+    return booking
 
 
 @freezing_bp.route("/freezing_schedule")
@@ -17,34 +46,6 @@ def freezing_schedule():
     conn = get_db()
     cur = conn.cursor()
     today = datetime.date.today()
-
-    # Move expired bookings to completed_freezing
-    cur.execute(
-        "SELECT * FROM freezing_bookings WHERE freezing_date < ? AND status='active'",
-        [today],
-    )
-    expired = cur.fetchall()
-
-    for e in expired:
-        cur.execute(
-            """INSERT INTO completed_freezing
-               (user_name, pi_name, email, origin, sample_name, grids, freezing_date)
-              VALUES (?, ?, ?, ?, ?, ?, ?)""",
-            (e["user_name"], e["pi_name"], e["email"],
-             e["origin"], e["sample_name"], e["grids"], e["freezing_date"]),
-        )
-        cur.execute(
-            "UPDATE freezing_bookings SET status='completed' WHERE id=?", [e["id"]]
-        )
-        send_email(
-            e["email"],
-            "Cryo-EM Freezing Completed",
-            (
-                f"Dear {e['user_name']},\n\n"
-                f"Your freezing on {e['freezing_date']} is completed.\n\n"
-                f"Cryo-EM Team"
-            ),
-        )
 
     cur.execute("SELECT * FROM freezing_bookings WHERE status='active'")
     active = cur.fetchall()

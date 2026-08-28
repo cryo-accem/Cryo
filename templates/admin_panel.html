@@ -3,11 +3,42 @@
 {% block content %}
 <main class="portal-page"><section class="page-content">
   <header class="page-header page-header--admin"><div><div class="eyebrow">Administration</div><h1>Admin dashboard</h1><p>Manage registrations and monitor facility activity.</p></div></header>
-  <div class="dashboard-grid">
-    <a href="{{ url_for('admin.datacollecting') }}" class="dashboard-card"><i class="fas fa-database"></i><strong>Data Collecting</strong><span>Review and manage data collection registrations.</span></a>
-    <a href="{{ url_for('admin.freezing_admin') }}" class="dashboard-card"><i class="fas fa-snowflake"></i><strong>Freezing</strong><span>Manage active and completed freezing slots.</span></a>
-    <a href="{{ url_for('admin.screening_admin') }}" class="dashboard-card"><i class="fas fa-microscope"></i><strong>Screening</strong><span>Review screening requests and progress.</span></a>
+  <div class="dashboard-charts">
+    <section class="chart-card">
+      <div class="chart-card__heading"><div><span class="chart-kicker">User overview</span><h2>Users by PI</h2><p>Distinct registered users grouped by principal investigator.</p></div><i class="fa-solid fa-users" aria-hidden="true"></i></div>
+      <div class="donut-layout">
+        <div class="donut-chart" data-donut>
+          <svg viewBox="0 0 120 120" aria-label="Users grouped by PI">
+            {% for item in pi_chart %}<circle class="donut-segment" tabindex="0" role="img" aria-label="{{ item.label }}: {{ item.value }} users" cx="60" cy="60" r="52" pathLength="100" style="--segment-color: {{ item.color }}; stroke-dasharray: {{ item.end - item.start }} 100; stroke-dashoffset: -{{ item.start }}" data-label="{{ item.label }}" data-value="{{ item.value }}"></circle>{% endfor %}
+          </svg>
+          <div class="donut-center"><strong>{{ pi_total }}</strong><span>users</span></div>
+          <div class="donut-tooltip" role="status"></div>
+        </div>
+      </div>
+    </section>
+    <section class="chart-card">
+      <div class="chart-card__heading"><div><span class="chart-kicker">Queue overview</span><h2>Current workload</h2><p>Registrations currently awaiting facility action.</p></div><i class="fa-solid fa-chart-pie" aria-hidden="true"></i></div>
+      <div class="donut-layout">
+        <div class="donut-chart donut-chart--queue" data-donut>
+          <svg viewBox="0 0 120 120" aria-label="Waiting registrations by service">
+            {% for item in waiting_chart %}<circle class="donut-segment" tabindex="0" role="img" aria-label="{{ item.label }}: {{ item.value }}" cx="60" cy="60" r="52" pathLength="100" style="--segment-color: {{ item.color }}; stroke-dasharray: {{ item.end - item.start }} 100; stroke-dashoffset: -{{ item.start }}" data-label="{{ item.label }}" data-value="{{ item.value }}"></circle>{% endfor %}
+          </svg>
+          <div class="donut-center"><strong>{{ waiting_total }}</strong><span>in queue</span></div>
+          <div class="donut-tooltip" role="status"></div>
+        </div>
+      </div>
+    </section>
   </div>
-  <div class="page-actions"><a href="{{ url_for('admin.history') }}" class="button">View history</a><a href="{{ url_for('admin.logout') }}" class="button muted">Logout</a></div>
+  <section class="revenue-dashboard">
+    <div class="revenue-heading"><div><span class="chart-kicker">Accounting</span><h2>Revenue &amp; slot usage</h2><p>Completed billing values only; GST is shown separately from net revenue.</p></div><form class="revenue-filter" method="get"><select name="range" onchange="this.form.submit()"><option value="all" {% if revenue.preset == 'all' %}selected{% endif %}>All time</option><option value="this_month" {% if revenue.preset == 'this_month' %}selected{% endif %}>This month</option><option value="last_month" {% if revenue.preset == 'last_month' %}selected{% endif %}>Last month</option><option value="last_3_months" {% if revenue.preset == 'last_3_months' %}selected{% endif %}>Last 3 months</option><option value="this_year" {% if revenue.preset == 'this_year' %}selected{% endif %}>This year</option><option value="custom" {% if revenue.preset == 'custom' %}selected{% endif %}>Custom range</option></select>{% if revenue.preset == 'custom' %}<input type="date" name="start" value="{{ revenue.start }}" required><input type="date" name="end" value="{{ revenue.end }}" required><button class="button" type="submit">Apply</button>{% endif %}</form></div>
+    <div class="revenue-cards">{% for label, key in [('Net Revenue','net'),('GST','gst'),('Gross Billed','gross'),('Completed Bookings','bookings'),('Actual 24-hour Slots','slots'),('Actual Grids','grids')] %}<div class="revenue-card"><span>{{ label }}</span><strong>{% if key in ['net','gst','gross'] %}₹{{ "{:,.2f}".format(revenue.totals[key]) }}{% elif key == 'bookings' %}{{ revenue.completed_bookings }}{% else %}{{ revenue.totals[key] }}{% endif %}</strong></div>{% endfor %}</div>
+    <div class="revenue-charts">
+      <section class="revenue-chart-card"><h3>Monthly net revenue</h3>{% if revenue.monthly %}<div class="line-chart"><svg viewBox="0 0 100 180" role="img" aria-label="Monthly net revenue">{% if revenue.monthly|length > 1 %}<polyline points="{% for item in revenue.monthly %}{{ item.x }},{{ item.y }} {% endfor %}" fill="none" stroke="#167da5" stroke-width="2" vector-effect="non-scaling-stroke"/>{% endif %}{% for item in revenue.monthly %}<circle cx="{{ item.x }}" cy="{{ item.y }}" r="2.5" fill="#32a889"><title>{{ item.label }}: ₹{{ "{:,.2f}".format(item.value) }}</title></circle>{% endfor %}</svg><div class="line-chart-labels">{% for item in revenue.monthly %}<small>{{ item.label }}</small>{% endfor %}</div></div>{% else %}<p class="empty-message">No completed revenue in this period.</p>{% endif %}</section>
+      <section class="revenue-chart-card"><h3>Revenue by user category</h3>{% for item in revenue.by_category %}<div class="revenue-row"><span>{{ item.label }}</span><strong>₹{{ "{:,.2f}".format(item.value) }}</strong></div>{% endfor %}</section>
+      <section class="revenue-chart-card"><h3>Revenue by service</h3>{% for item in revenue.by_service %}<div class="revenue-row"><span>{{ item.label }}</span><strong>₹{{ "{:,.2f}".format(item.value) }}</strong></div>{% endfor %}</section>
+      <section class="revenue-chart-card"><h3>Actual usage</h3><div class="usage-total"><strong>{{ revenue.totals.slots }}</strong><span>24-hour slots used</span></div><div class="usage-total"><strong>{{ revenue.totals.grids }}</strong><span>grids used</span></div>{% for item in revenue.monthly %}<div class="revenue-row"><span>{{ item.label }}</span><strong>{{ item.slots }} slots</strong></div>{% endfor %}</section>
+    </div>
+  </section>
+  <div class="dashboard-meta"><i class="fa-regular fa-clock" aria-hidden="true"></i> Last updated {{ updated_at }}</div>
 </section></main>
 {% endblock %}

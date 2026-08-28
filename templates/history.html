@@ -2,12 +2,70 @@
 {% block title %}ACCEM | History{% endblock %}
 {% block content %}
 <main class="portal-page"><section class="page-content">
-  <header class="page-header page-header--admin"><div><div class="eyebrow">Administration</div><h1>Completed slots</h1><p>History of completed imaging, freezing and screening bookings.</p></div></header>
-  <div class="data-stack">
-    <section class="data-panel"><h2>Completed imaging slots</h2>{% if completed_imaging %}<div class="table-wrap"><table class="data-table"><thead><tr><th>Position</th><th>User Name</th><th>PI Name</th><th>Origin</th><th>Sample Name</th><th>Grids</th><th>Days</th><th>Completion Date</th></tr></thead><tbody>{% for slot in completed_imaging %}<tr><td>{{ loop.index }}</td><td>{{ slot.user_name }}</td><td>{{ slot.pi_name }}</td><td>{{ slot.origin }}</td><td>{{ slot.sample_name }}</td><td>{{ slot.grids }}</td><td>{{ slot.days }}</td><td>{{ slot.completion_date }}</td></tr>{% endfor %}</tbody></table></div>{% else %}<div class="empty-message">No completed imaging slots found.</div>{% endif %}</section>
-    <section class="data-panel"><h2>Completed freezing slots</h2>{% if completed_freezing %}<div class="table-wrap"><table class="data-table"><thead><tr><th>Position</th><th>User Name</th><th>PI Name</th><th>Origin</th><th>Sample Name</th><th>Grids</th><th>Freezing Date</th><th>Completed At</th></tr></thead><tbody>{% for slot in completed_freezing %}<tr><td>{{ loop.index }}</td><td>{{ slot.user_name }}</td><td>{{ slot.pi_name }}</td><td>{{ slot.origin }}</td><td>{{ slot.sample_name }}</td><td>{{ slot.grids }}</td><td>{{ slot.freezing_date }}</td><td>{{ slot.completed_at[:10] if slot.completed_at and slot.completed_at is string else slot.completed_at.strftime('%Y-%m-%d') if slot.completed_at else '' }}</td></tr>{% endfor %}</tbody></table></div>{% else %}<div class="empty-message">No completed freezing slots found.</div>{% endif %}</section>
-    <section class="data-panel"><h2>Completed screening slots</h2>{% if completed_screening %}<div class="table-wrap"><table class="data-table"><thead><tr><th>Position</th><th>User Name</th><th>PI Name</th><th>Origin</th><th>Sample Name</th><th>Grids</th><th>Days</th><th>Completion Date</th></tr></thead><tbody>{% for slot in completed_screening %}<tr><td>{{ loop.index }}</td><td>{{ slot.user_name }}</td><td>{{ slot.pi_name }}</td><td>{{ slot.origin }}</td><td>{{ slot.sample_name }}</td><td>{{ slot.grids }}</td><td>{{ slot.days }}</td><td>{{ slot.completion_date }}</td></tr>{% endfor %}</tbody></table></div>{% else %}<div class="empty-message">No completed screening slots found.</div>{% endif %}</section>
-  </div>
+  <header class="page-header page-header--admin"><div><div class="eyebrow">Administration</div><h1>Completed slots</h1><p>History, charge sheets and payment tracking.</p></div></header>
+
+  {% macro completed_table(title, rows, service_key, service_label, has_days=False) %}
+  <section class="data-panel">
+    <h2>{{ title }}</h2>
+    {% if rows %}
+    <div class="table-wrap"><table class="data-table">
+      <thead><tr><th>Position</th><th>User</th><th>Origin</th><th>Service details</th><th>Actual usage</th><th>Completed</th><th>Charge Sheet</th><th>Payment tracking</th></tr></thead>
+      <tbody>{% for slot in rows %}
+        <tr>
+          <td>{{ loop.index }}</td>
+          <td><strong>{{ slot.user_name }}</strong><br><small>{{ slot.email }}</small><br><small>PI: {{ slot.pi_name }}</small></td>
+          <td>{{ slot.origin }}</td>
+          <td>{{ slot.sample_name }}{% if has_days %}<br><small>{{ slot.days }} requested days / {{ slot.grids }} requested grids</small>{% else %}<br><small>{{ slot.grids }} requested grids</small>{% endif %}</td>
+          <td>{{ slot.actual_slots or 0 }} slots<br>{{ slot.actual_grids or 0 }} grids</td>
+          <td>{{ slot.completion_date if service_key != 'freezing' else slot.completed_at }}</td>
+          <td>
+            {% if slot.charge_sheet_sent_at %}<span class="status-badge completed">Sent {{ slot.charge_sheet_sent_at }}</span>{% else %}<span class="status-badge waiting">Not sent</span>{% endif %}
+            <form method="post" action="{{ url_for('admin.send_charge_sheet', service_key=service_key, booking_id=slot.id) }}" class="stacked-form">
+              {% if slot.origin|lower == 'internal' %}<input type="email" name="pi_email" value="{{ slot.pi_email or '' }}" placeholder="PI email (optional)" aria-label="PI email">{% endif %}
+              <button class="button small" type="submit">{{ 'Resend Charge Sheet' if slot.charge_sheet_sent_at else 'Generate & Send' }}</button>
+            </form>
+          </td>
+          <td>
+            {% if slot.origin|lower == 'internal' %}
+              <strong>{{ slot.debit_head_status or 'Debit Head Pending' }}</strong>
+              <form method="post" action="{{ url_for('admin.update_payment', service_key=service_key, booking_id=slot.id) }}" class="stacked-form">
+                <input type="hidden" name="origin" value="{{ slot.origin }}">
+                <select name="status" aria-label="Debit head status">
+                  {% for status in ['Debit Head Pending', 'Debit Head Received', 'Debit Head Verified'] %}<option {{ 'selected' if (slot.debit_head_status or 'Debit Head Pending') == status }}>{{ status }}</option>{% endfor %}
+                </select>
+                <input name="debit_head_details" value="{{ slot.debit_head_details or '' }}" placeholder="Debit head details">
+                <textarea name="admin_remarks" placeholder="Admin remarks">{{ slot.admin_remarks or '' }}</textarea>
+                <button class="button small secondary" type="submit">Save</button>
+              </form>
+            {% else %}
+              <strong>{{ slot.payment_status or 'Payment Pending' }}</strong>
+              <form method="post" enctype="multipart/form-data" action="{{ url_for('admin.update_payment', service_key=service_key, booking_id=slot.id) }}" class="stacked-form">
+                <input type="hidden" name="origin" value="{{ slot.origin }}">
+                <select name="status" aria-label="Payment status">
+                  {% for status in ['Payment Pending', 'Payment Proof Received', 'Payment Verified', 'Payment Rejected'] %}<option {{ 'selected' if (slot.payment_status or 'Payment Pending') == status }}>{{ status }}</option>{% endfor %}
+                </select>
+                <input name="transaction_reference" value="{{ slot.transaction_reference or '' }}" placeholder="Transaction/reference">
+                <input type="date" name="transaction_date" value="{{ slot.transaction_date or '' }}" aria-label="Transaction date">
+                <input type="number" step="0.01" name="amount_received" value="{{ slot.amount_received or '' }}" placeholder="Amount received">
+                <input name="payment_mode" value="{{ slot.payment_mode or '' }}" placeholder="Payment mode">
+                <input type="date" name="proof_received_date" value="{{ slot.proof_received_date or '' }}" aria-label="Proof received date">
+                <input type="file" name="payment_proof" accept=".pdf,.png,.jpg,.jpeg" aria-label="Payment proof">
+                {% if slot.payment_proof_path %}<a href="{{ url_for('admin.download_payment_proof', service_key=service_key, booking_id=slot.id) }}">Download {{ slot.payment_proof_original_name or 'proof' }}</a>{% endif %}
+                <textarea name="admin_remarks" placeholder="Admin remarks">{{ slot.admin_remarks or '' }}</textarea>
+                <button class="button small secondary" type="submit">Save</button>
+              </form>
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}</tbody>
+    </table></div>
+    {% else %}<div class="empty-message">No completed bookings found.</div>{% endif %}
+  </section>
+  {% endmacro %}
+
+  {{ completed_table('Completed imaging slots', completed_imaging, 'imaging', 'Data Collection', True) }}
+  {{ completed_table('Completed freezing slots', completed_freezing, 'freezing', 'Freezing') }}
+  {{ completed_table('Completed screening slots', completed_screening, 'screening', 'Screening', True) }}
   <div class="page-actions"><a href="{{ url_for('admin.panel') }}" class="button secondary">← Back to dashboard</a></div>
 </section></main>
 {% endblock %}

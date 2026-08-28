@@ -18,7 +18,7 @@ def init_mail(app):
     mail.init_app(app)
 
 
-def send_email(recipient: str, subject: str, body: str):
+def send_email(recipient: str, subject: str, body: str, cc=None, attachments=None):
     """Send email asynchronously so it never blocks a request."""
     from flask import current_app
 
@@ -27,8 +27,11 @@ def send_email(recipient: str, subject: str, body: str):
     def _send():
         with app.app_context():
             try:
-                msg = Message(subject, recipients=[recipient])
+                msg = Message(subject, recipients=[recipient], cc=cc or [])
                 msg.body = body
+                for attachment in attachments or []:
+                    filename, content_type, data = attachment
+                    msg.attach(filename, content_type, data)
                 mail.send(msg)
             except Exception as exc:
                 app.logger.error(f"Email to {recipient} failed: {exc}")

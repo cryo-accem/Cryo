@@ -18,6 +18,12 @@ def create_app() -> Flask:
 
     app.secret_key = os.environ.get("SECRET_KEY", "change-me-in-production")
     app.config["PERMANENT_SESSION_LIFETIME"] = datetime.timedelta(minutes=30)
+    app.config["CHARGE_SHEET_CC_EMAIL"] = os.environ.get("CHARGE_SHEET_CC_EMAIL", "")
+    app.config["PAYMENT_PROOF_DIR"] = os.environ.get(
+        "PAYMENT_PROOF_DIR",
+        os.path.join(app.instance_path, "payment_proofs"),
+    )
+    app.config["MAX_CONTENT_LENGTH"] = 10 * 1024 * 1024
 
     init_mail(app)
 

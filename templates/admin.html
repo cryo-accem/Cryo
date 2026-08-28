@@ -1,14 +1,26 @@
 {% extends "base.html" %}
 {% block title %}ACCEM | Admin login{% endblock %}
 {% block content %}
-<main class="portal-page"><section class="page-content">
+<main class="portal-page admin-login-page"><section class="page-content">
   <header class="page-header page-header--admin"><div><div class="eyebrow">Administration</div><h1>Admin login</h1><p>Sign in to manage facility bookings and schedules.</p></div></header>
-  <div class="form-card">
+  <div class="admin-login-card">
+    <div class="admin-login-heading">
+      <span class="admin-login-icon" aria-hidden="true"><i class="fa-solid fa-shield-halved"></i></span>
+      <div>
+        <span class="admin-login-kicker">Secure access</span>
+        <h2>Welcome back</h2>
+        <p>Use your facility credentials to continue.</p>
+      </div>
+    </div>
     {% with messages = get_flashed_messages() %}{% if messages %}{% for message in messages %}<div class="alert">{{ message }}</div>{% endfor %}{% endif %}{% endwith %}
     <form action="{{ url_for('admin.login') }}" method="post">
-      <div class="form-grid"><div class="form-field full"><label for="username">Username</label><input type="text" id="username" name="username" required></div><div class="form-field full"><label for="password">Password</label><input type="password" id="password" name="password" required></div></div>
-      <div class="form-actions"><button type="submit" class="button">Login</button></div>
+      <div class="admin-login-fields">
+        <div class="form-field"><label for="username">Username</label><div class="admin-input"><i class="fa-regular fa-user" aria-hidden="true"></i><input type="text" id="username" name="username" autocomplete="username" required></div></div>
+        <div class="form-field"><label for="password">Password</label><div class="admin-input"><i class="fa-solid fa-lock" aria-hidden="true"></i><input type="password" id="password" name="password" autocomplete="current-password" required></div></div>
+      </div>
+      <div class="form-actions"><button type="submit" class="button"><i class="fa-solid fa-arrow-right-to-bracket" aria-hidden="true"></i> Sign in</button></div>
     </form>
+    <p class="admin-login-note"><i class="fa-solid fa-circle-info" aria-hidden="true"></i> Restricted to authorised facility staff.</p>
   </div>
 </section></main>
 {% endblock %}

@@ -1,6 +1,7 @@
 # Python
 .venv/
 venv/
+.venv-1/
 __pycache__/
 *.py[cod]
 
@@ -10,6 +11,8 @@ __pycache__/
 # Environment / secrets
 .env
 .env.*
+instance/payment_proofs/
 
 # IDE
 .vscode/
+preview.db
