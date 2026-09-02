@@ -3,6 +3,7 @@ import sqlite3
 import urllib.parse
 
 from dotenv import load_dotenv
+from werkzeug.security import generate_password_hash
 
 import pymysql
 import pymysql.cursors
@@ -292,6 +293,16 @@ def init_db():
     # Completely safe — if no unique index exists, nothing happens.
     _drop_unique_email(cur, "bookings")
     _drop_unique_email(cur, "screening_bookings")
+
+    # ── Seed default admin user if none exists ──────────────────────────────
+    cur.execute("SELECT COUNT(*) as cnt FROM users WHERE role = ?", ["admin"])
+    admin_count = cur.fetchone()["cnt"]
+    if admin_count == 0:
+        default_password_hash = generate_password_hash("admin123", method="pbkdf2:sha256")
+        cur.execute(
+            "INSERT INTO users (username, email, password_hash, role) VALUES (?, ?, ?, ?)",
+            ["admin", "admin@accem.iisc.ac.in", default_password_hash, "admin"]
+        )
 
     conn.commit()
     cur.close()

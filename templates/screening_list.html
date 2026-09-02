@@ -6,14 +6,6 @@
   <div class="data-stack">
     <section class="data-panel"><h2>Ongoing slots</h2>{% if ongoing_slots %}<div class="table-wrap"><table class="data-table"><thead><tr><th>Position</th><th>Name of User</th><th>Name of PI</th><th>Origin</th><th>Registration Date</th></tr></thead><tbody>{% for slot in ongoing_slots %}<tr><td>{{ loop.index }}</td><td>{{ slot.user_name }}</td><td>{{ slot.pi_name }}</td><td>{{ slot.origin if slot.origin else slot.esm }}</td><td>{{ slot.registration_date }}</td></tr>{% endfor %}</tbody></table></div>{% else %}<div class="empty-message">No ongoing screening slots at the moment.</div>{% endif %}</section>
     <section class="data-panel"><h2>Waiting slots</h2>{% if waiting_slots %}<div class="table-wrap"><table class="data-table"><thead><tr><th>Position</th><th>Name of User</th><th>Name of PI</th><th>Origin</th><th>Registration Date</th></tr></thead><tbody>{% for slot in waiting_slots %}<tr><td>{{ loop.index }}</td><td>{{ slot.user_name }}</td><td>{{ slot.pi_name }}</td><td>{{ slot.origin if slot.origin else slot.esm }}</td><td>{{ slot.registration_date }}</td></tr>{% endfor %}</tbody></table></div>{% else %}<div class="empty-message">No waiting screening slots at the moment.</div>{% endif %}</section>
-    <section class="data-panel" id="history">
-      <h2>History</h2>
-      {% if completed_slots %}
-        <div class="table-wrap"><table class="data-table"><thead><tr><th>Position</th><th>Name of User</th><th>Name of PI</th><th>Origin</th><th>Registration Date</th></tr></thead><tbody>{% for slot in completed_slots %}<tr><td>{{ loop.index }}</td><td>{{ slot.user_name }}</td><td>{{ slot.pi_name }}</td><td>{{ slot.origin if slot.origin else slot.esm }}</td><td>{{ slot.registration_date }}</td></tr>{% endfor %}</tbody></table></div>
-      {% else %}
-        <div class="empty-message">No completed screening slots yet.</div>
-      {% endif %}
-    </section>
   </div>
 </section>
   <div class="success-modal" id="success-modal" data-success-type="Screening">
@@ -28,7 +20,7 @@
     document.addEventListener('DOMContentLoaded', function () {
       const modal = document.getElementById('success-modal');
       const params = new URLSearchParams(window.location.search);
-      if ((window.location.hash === '#history' || params.get('success')) && modal) {
+      if (params.get('success') && modal) {
         modal.classList.add('show');
       }
     });

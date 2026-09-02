@@ -1,15 +1,19 @@
 import datetime
+import csv
+import io
 import os
 import re
 import uuid
+import zipfile
 from decimal import Decimal, InvalidOperation
 from flask import (
-    Blueprint, current_app, render_template, request, send_file,
+    Blueprint, current_app, render_template, request, send_file, Response,
     redirect, url_for, session, flash,
 )
 from werkzeug.security import check_password_hash
 from werkzeug.utils import secure_filename
 from database import get_db
+from database import _is_sqlite_url
 from extensions import send_email
 from revenue import calculate_booking_revenue
 from blueprints.freezing import complete_freezing_booking
@@ -34,6 +38,9 @@ _ALLOWED_ADMIN_ENDPOINTS = {
     "admin.send_charge_sheet",
     "admin.update_payment",
     "admin.download_payment_proof",
+    "admin.download_registrations_csv",
+    "admin.download_database_backup",
+    "admin.archive_completed_registrations",
     "static",
 }
 
@@ -556,6 +563,139 @@ def delete_sc(booking_id):
     cur.close()
     conn.close()
     return redirect(url_for("admin.screening_admin"))
+
+
+# ── Registration backup ───────────────────────────────────────────────────────
+
+@admin_bp.route("/registrations.csv")
+def download_registrations_csv():
+    if not session.get("admin_logged_in"):
+        return redirect(url_for("admin.login"))
+
+    registrations = []
+    for table, registration_type in (
+        ("bookings", "Data Collection"),
+        ("screening_bookings", "Screening"),
+        ("freezing_bookings", "Freezing"),
+        ("completed_freezing", "Freezing (completed)"),
+    ):
+        conn = get_db()
+        cur = conn.cursor()
+        cur.execute(f"SELECT * FROM {table}")
+        for database_row in cur.fetchall():
+            row = dict(database_row)
+            row["registration_type"] = registration_type
+            row["source_table"] = table
+            registrations.append(row)
+        cur.close()
+        conn.close()
+
+    fields = ["registration_type", "source_table"]
+    for row in registrations:
+        for field in row:
+            if field not in fields and field != "password_hash":
+                fields.append(field)
+
+    output = io.StringIO(newline="")
+    writer = csv.DictWriter(output, fieldnames=fields, extrasaction="ignore")
+    writer.writeheader()
+    writer.writerows(
+        {field: row.get(field, "") for field in fields}
+        for row in registrations
+    )
+    return Response(
+        output.getvalue(),
+        mimetype="text/csv",
+        headers={"Content-Disposition": "attachment; filename=cryo-registrations-backup.csv"},
+    )
+
+
+def _registration_rows(include_completed=True):
+    registrations = []
+    tables = (
+        ("users", "Users"),
+        ("bookings", "Data Collection"),
+        ("screening_bookings", "Screening"),
+        ("freezing_bookings", "Freezing"),
+        ("completed_freezing", "Freezing (completed)"),
+    )
+    conn = get_db()
+    cur = conn.cursor()
+    for table, registration_type in tables:
+        where = ""
+        if not include_completed and table in {"bookings", "screening_bookings"}:
+            where = " WHERE status <> 'completed'"
+        cur.execute(f"SELECT * FROM {table}{where}")
+        for database_row in cur.fetchall():
+            row = dict(database_row)
+            row["registration_type"] = registration_type
+            row["source_table"] = table
+            registrations.append(row)
+    cur.close()
+    conn.close()
+    return registrations
+
+
+def _rows_csv(rows):
+    fields = ["registration_type", "source_table"]
+    for row in rows:
+        for field in row:
+            if field not in fields:
+                fields.append(field)
+    output = io.StringIO(newline="")
+    writer = csv.DictWriter(output, fieldnames=fields, extrasaction="ignore")
+    writer.writeheader()
+    writer.writerows({field: row.get(field, "") for field in fields} for row in rows)
+    return output.getvalue()
+
+
+@admin_bp.route("/database-backup.zip")
+def download_database_backup():
+    if not session.get("admin_logged_in"):
+        return redirect(url_for("admin.login"))
+    archive = io.BytesIO()
+    with zipfile.ZipFile(archive, "w", zipfile.ZIP_DEFLATED) as backup:
+        if _is_sqlite_url():
+            conn = get_db()
+            backup.writestr("cryo-database.sqlite3", conn.serialize())
+            conn.close()
+        else:
+            backup.writestr("registrations.csv", _rows_csv(_registration_rows()))
+    archive.seek(0)
+    return send_file(archive, as_attachment=True, download_name="cryo-database-backup.zip", mimetype="application/zip")
+
+
+@admin_bp.route("/archive-completed", methods=["POST"])
+def archive_completed_registrations():
+    if not session.get("admin_logged_in"):
+        return redirect(url_for("admin.login"))
+    rows = _registration_rows()
+    completed = [
+        row for row in rows
+        if row["source_table"] == "completed_freezing"
+        or row.get("status") == "completed"
+    ]
+    if not completed:
+        flash("There are no completed registrations to archive.")
+        return redirect(url_for("admin.panel"))
+
+    timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+    backup_dir = os.path.join(current_app.instance_path, "registration_archives")
+    os.makedirs(backup_dir, exist_ok=True)
+    archive_path = os.path.join(backup_dir, f"completed-registrations-{timestamp}.csv")
+    with open(archive_path, "w", newline="", encoding="utf-8") as archive:
+        archive.write(_rows_csv(completed))
+
+    conn = get_db()
+    cur = conn.cursor()
+    cur.execute("DELETE FROM bookings WHERE status='completed'")
+    cur.execute("DELETE FROM screening_bookings WHERE status='completed'")
+    cur.execute("DELETE FROM completed_freezing")
+    conn.commit()
+    cur.close()
+    conn.close()
+    flash(f"Archived {len(completed)} completed registrations, then removed them from the database.")
+    return redirect(url_for("admin.panel"))
 
 
 # ── History ──────────────────────────────────────────────────────────────────

@@ -28,7 +28,7 @@ def register():
             if not success:
                 flash(message)
                 return redirect(url_for("register.register"))
-            return redirect(url_for("imaging.list_view", _anchor="history", success="datacollecting"))
+            return redirect(url_for("imaging.list_view", success="datacollecting"))
 
         # ── Screening ────────────────────────────────────────────────────────
         elif reg_type == "screening":
@@ -42,7 +42,7 @@ def register():
             if not success:
                 flash(message)
                 return redirect(url_for("register.register"))
-            return redirect(url_for("screening.screening_list", _anchor="history", success="screening"))
+            return redirect(url_for("screening.screening_list", success="screening"))
 
         # ── Freezing ─────────────────────────────────────────────────────────
         elif reg_type == "freezing":
@@ -55,6 +55,6 @@ def register():
             if not success:
                 flash(message)
                 return redirect(url_for("register.register"))
-            return redirect(url_for("freezing.freezing_schedule", _anchor="history", success="freezing"))
+            return redirect(url_for("freezing.freezing_schedule", success="freezing"))
 
     return render_template("register.html")

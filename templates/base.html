@@ -14,7 +14,7 @@
 <div class="site-shell">
   <header class="site-header">
     <div class="header-inner">
-      <a class="brand" href="{{ url_for('public.home') }}">
+      <a class="brand" href="{{ url_for('admin.login') }}" aria-label="Admin login">
         <img class="brand-mark" src="{{ url_for('static', filename='images/iisc_logo.png') }}" alt="Indian Institute of Science">
         <span><strong>ACCEM</strong><small>Advanced Centre for<br>Cryo-Electron Microscopy</small></span>
       </a>
@@ -24,7 +24,7 @@
       <nav class="site-nav" aria-label="Primary navigation">
         <a href="{{ url_for('public.home') }}">Home</a>
         <a href="{{ url_for('public.about') }}">About</a>
-        <a href="{{ url_for('public.facility') }}">Facility</a>
+        <a href="{{ url_for('public.facility') }}">Instructions</a>
         <a href="{{ url_for('public.equipments') }}">Equipments</a>
         <a href="{{ url_for('public.workflow') }}">Workflow</a>
         <a href="{{ url_for('public.publications') }}">Publications</a>
@@ -56,15 +56,15 @@
     <div class="footer-grid">
       <div><h3>ACCEM</h3><p>Advanced Centre for Cryo-Electron Microscopy<br>Indian Institute of Science, Bengaluru</p></div>
       <div><h3>Contact</h3><p>cryoem.iisc@gmail.com<br>somnath@iisc.ac.in</p></div>
-      <div><h3>Quick links</h3><a href="{{ url_for('public.facility') }}">Facility</a><a href="{{ url_for('public.equipments') }}">Equipments</a><a href="{{ url_for('public.publications') }}">Publications</a><a href="{{ url_for('public.events') }}">Events</a></div>
+      <div><h3>Quick links</h3><a href="{{ url_for('public.facility') }}">Instructions</a><a href="{{ url_for('public.equipments') }}">Equipments</a><a href="{{ url_for('public.publications') }}">Publications</a><a href="{{ url_for('public.events') }}">Events</a></div>
       <div><h3>Connect</h3><a href="{{ url_for('register.register') }}">Register for a slot</a><a href="{{ url_for('imaging.list_view') }}">Data collection schedule</a></div>
     </div>
     <div class="copyright">Copyright © 2026 Advanced Centre for Cryo-Electron Microscopy (ACCEM), IISc. All Rights Reserved.</div>
   </footer>
   {% endif %}
 </div>
-{% if request.path.startswith('/admin') and request.path != '/admin/' %}
 <script>
+// Initialize donut chart tooltips
 document.querySelectorAll('[data-donut]').forEach((donut) => {
   const tooltip = donut.querySelector('.donut-tooltip');
   donut.querySelectorAll('.donut-segment').forEach((segment) => {
@@ -79,6 +79,157 @@ document.querySelectorAll('[data-donut]').forEach((donut) => {
     segment.addEventListener('blur', hideTooltip);
   });
 });
+
+// Dynamic user statistics chart loader
+(function() {
+  let lastDataHash = null;
+
+  function hashData(data) {
+    return JSON.stringify(data).split('').reduce((a, b) => {
+      a = ((a << 5) - a) + b.charCodeAt(0);
+      return a & a;
+    }, 0);
+  }
+
+  async function loadUserStatistics() {
+    try {
+      const response = await fetch('/api/user-statistics');
+      if (!response.ok) throw new Error('Failed to fetch user statistics');
+      
+      const result = await response.json();
+      if (!result.success) throw new Error(result.error);
+
+      const dataHash = hashData(result.data);
+      
+      // Only update if data has changed
+      if (lastDataHash !== null && lastDataHash === dataHash) {
+        console.log('No changes in user statistics');
+        return;
+      }
+
+      lastDataHash = dataHash;
+      renderChart(result);
+    } catch (error) {
+      console.error('Error loading user statistics:', error);
+    }
+  }
+
+  function renderChart(result) {
+    const container = document.getElementById('user-stats-container');
+    if (!container) return;
+
+    const { total, data } = result;
+    
+    // Update total users count
+    const totalCountEl = document.getElementById('total-users-count');
+    if (totalCountEl) {
+      totalCountEl.textContent = "0 total users";
+      const start = performance.now();
+      const animateTotal = (now) => {
+        const progress = Math.min((now - start) / 1400, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        totalCountEl.textContent = `${Math.floor(total * eased)} total users`;
+        if (progress < 1) requestAnimationFrame(animateTotal);
+      };
+      requestAnimationFrame(animateTotal);
+    }
+
+    // Create SVG chart HTML
+    let svgSegments = '<circle class="donut-track" cx="60" cy="60" r="52" pathLength="100"></circle>';
+    
+    data.forEach((item) => {
+      svgSegments += `
+        <circle class="donut-segment" tabindex="0" role="img" aria-label="${item.label}: ${item.value} users" 
+          cx="60" cy="60" r="52" pathLength="100" 
+          style="--segment-color: ${item.color}; stroke-dasharray: ${item.end - item.start} 100; stroke-dashoffset: -${item.start}" 
+          data-label="${item.label}" data-value="${item.value} users"></circle>
+      `;
+    });
+
+    // Create the chart and facility metric cards
+    const chartHTML = `
+      <article class="category-stat-card">
+        <div class="category-stat-card__heading">
+          <h3>User Distribution by Affiliation</h3>
+          <div><span>${total} users</span></div>
+        </div>
+        <div class="category-stat-card__body">
+          <div class="category-stat-card__chart donut-chart" data-donut>
+            <svg viewBox="0 0 120 120" role="img" aria-label="Users grouped by affiliation">
+              ${svgSegments}
+            </svg>
+            <div class="donut-center"><strong data-count-to="${total}">0</strong><span>users</span></div>
+            <div class="donut-tooltip" role="status"></div>
+          </div>
+        </div>
+      </article>
+      <article class="category-stat-card metric-card">
+        <div class="category-stat-card__heading">
+          <h3>Publications</h3>
+          <div><span>OpenAlex matches</span></div>
+        </div>
+        <div class="category-stat-card__body metric-card__body">
+          <i class="fa-solid fa-book-open metric-card__icon" aria-hidden="true"></i>
+          <strong class="metric-count" data-count-to="${result.metrics.publications}">0</strong>
+          <span>records mentioning ACCEM / cryo-EM IISc</span>
+        </div>
+      </article>
+      <article class="category-stat-card metric-card">
+        <div class="category-stat-card__heading">
+          <h3>EMDB structures</h3>
+          <div><span>PI-associated entries</span></div>
+        </div>
+        <div class="category-stat-card__body metric-card__body">
+          <i class="fa-solid fa-cubes metric-card__icon" aria-hidden="true"></i>
+          <strong class="metric-count" data-count-to="85" data-count-suffix="+">0</strong>
+          <span>structures deposited in EMDB</span>
+        </div>
+      </article>
+    `;
+
+    container.innerHTML = chartHTML;
+    container.querySelectorAll("[data-count-to]").forEach((counter) => {
+      const target = Number(counter.dataset.countTo);
+      const suffix = counter.dataset.countSuffix || "";
+      const duration = 1400;
+      const start = performance.now();
+      const animate = (now) => {
+        const progress = Math.min((now - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        counter.textContent = `${Math.floor(target * eased)}${suffix}`;
+        if (progress < 1) requestAnimationFrame(animate);
+      };
+      requestAnimationFrame(animate);
+    });
+
+    // Re-initialize tooltips for the new chart
+    container.querySelectorAll('[data-donut]').forEach((donut) => {
+      const tooltip = donut.querySelector('.donut-tooltip');
+      donut.querySelectorAll('.donut-segment').forEach((segment) => {
+        const showTooltip = () => {
+          tooltip.innerHTML = `${segment.dataset.label}<br><strong>${segment.dataset.value}</strong>`;
+          tooltip.classList.add('is-visible');
+        };
+        const hideTooltip = () => tooltip.classList.remove('is-visible');
+        segment.addEventListener('mouseenter', showTooltip);
+        segment.addEventListener('mouseleave', hideTooltip);
+        segment.addEventListener('focus', showTooltip);
+        segment.addEventListener('blur', hideTooltip);
+      });
+    });
+  }
+
+  // Load on page load
+  if (window.location.pathname === '/home' || window.location.pathname === '/') {
+    loadUserStatistics();
+    
+    // Refresh every 30 seconds to check for new registrations
+    setInterval(loadUserStatistics, 30000);
+  }
+})();
+</script>
+{% if request.path.startswith('/admin') and request.path != '/admin/' %}
+<script>
 document.querySelectorAll('[data-admin-filter]').forEach((filter) => {
   const scope = filter.closest('.data-stack');
   const search = filter.querySelector('[data-table-search]');

@@ -25,6 +25,17 @@
       <div class="step"><span class="step-number">06</span><img src="{{ url_for('static', filename='images/cryo-em_workstation.png') }}" alt="Structural analysis"><strong>Structural analysis</strong><span>Build the structure</span></div>
     </div>
   </section>
+  <section class="section user-statistics">
+   <div class="section-heading"><div><h2>Facility users by category</h2><p>Live data showing actual users who have used the ACCEM facility, grouped by origin/affiliation.</p></div><span class="user-statistics-total" id="total-users-count">Loading...</span></div>
+   <div class="user-statistics-grid" id="user-stats-container">
+     <article class="category-stat-card">
+       <div class="category-stat-card__heading"><h3>Dynamic User Statistics</h3><div><span id="loading-indicator">Loading user data...</span></div></div>
+       <div class="category-stat-card__body" style="text-align: center; padding: 40px;">
+         <p>Fetching real-time user statistics from the database...</p>
+       </div>
+     </article>
+   </div>
+  </section>
   <section class="section glance">
     <div class="section-heading"><h2>Our facility at a glance</h2><p>Expertise, instrumentation and support for every project.</p></div>
     <div class="card-grid">

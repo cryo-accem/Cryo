@@ -39,6 +39,12 @@
       <section class="revenue-chart-card"><h3>Actual usage</h3><div class="usage-total"><strong>{{ revenue.totals.slots }}</strong><span>24-hour slots used</span></div><div class="usage-total"><strong>{{ revenue.totals.grids }}</strong><span>grids used</span></div>{% for item in revenue.monthly %}<div class="revenue-row"><span>{{ item.label }}</span><strong>{{ item.slots }} slots</strong></div>{% endfor %}</section>
     </div>
   </section>
-  <div class="dashboard-meta"><i class="fa-regular fa-clock" aria-hidden="true"></i> Last updated {{ updated_at }}</div>
+  <div class="dashboard-meta"><i class="fa-regular fa-clock" aria-hidden="true"></i> Last updated {{ updated_at }}
+    <a class="button button--secondary backup-button" href="{{ url_for('admin.download_database_backup') }}">Download full database backup</a>
+    <form method="post" action="{{ url_for('admin.archive_completed_registrations') }}" style="display:inline" onsubmit="return confirm('This will save completed registrations to an archive and permanently remove them from the database. Continue?');">
+      <button class="button archive-button" type="submit">Archive and remove completed</button>
+    </form>
+    <strong class="archive-warning">WARNING: Completed records will be saved first to <code>instance/registration_archives/</code>, then permanently deleted from the database.</strong>
+  </div>
 </section></main>
 {% endblock %}

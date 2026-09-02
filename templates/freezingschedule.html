@@ -48,41 +48,6 @@
         {% endif %}
       </section>
 
-      <section class="data-panel" id="history">
-        <h2>History</h2>
-        {% if completed_slots %}
-          <div class="table-wrap">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Position</th>
-                  <th>Name of User</th>
-                  <th>Name of PI</th>
-                  <th>Origin</th>
-                  <th>Grids</th>
-                  <th>Date for Freezing</th>
-                  <th>Completed At</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for slot in completed_slots %}
-                  <tr>
-                    <td>{{ loop.index }}</td>
-                    <td>{{ slot.user_name }}</td>
-                    <td>{{ slot.pi_name }}</td>
-                    <td>{{ slot.origin if slot.origin else slot.esm }}</td>
-                    <td>{{ slot.grids }}</td>
-                    <td>{{ slot.freezing_date }}</td>
-                    <td>{{ slot.completed_at[:10] if slot.completed_at and slot.completed_at is string else slot.completed_at.strftime('%Y-%m-%d') if slot.completed_at else '' }}</td>
-                  </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </div>
-        {% else %}
-          <div class="empty-message">No recently completed freezing slots.</div>
-        {% endif %}
-      </section>
     </div>
   </section>
   <div class="success-modal" id="success-modal" data-success-type="Freezing">
@@ -97,7 +62,7 @@
     document.addEventListener('DOMContentLoaded', function () {
       const modal = document.getElementById('success-modal');
       const params = new URLSearchParams(window.location.search);
-      if ((window.location.hash === '#history' || params.get('success')) && modal) {
+      if (params.get('success') && modal) {
         modal.classList.add('show');
       }
     });

@@ -11,7 +11,7 @@
     <div class="table-wrap"><table class="data-table">
       <thead><tr><th>Position</th><th>User</th><th>Origin</th><th>Service details</th><th>Actual usage</th><th>Completed</th><th>Charge Sheet</th><th>Payment tracking</th></tr></thead>
       <tbody>{% for slot in rows %}
-        <tr>
+        <tr data-origin="{{ slot.origin }}">
           <td>{{ loop.index }}</td>
           <td><strong>{{ slot.user_name }}</strong><br><small>{{ slot.email }}</small><br><small>PI: {{ slot.pi_name }}</small></td>
           <td>{{ slot.origin }}</td>
@@ -63,9 +63,20 @@
   </section>
   {% endmacro %}
 
-  {{ completed_table('Completed imaging slots', completed_imaging, 'imaging', 'Data Collection', True) }}
-  {{ completed_table('Completed freezing slots', completed_freezing, 'freezing', 'Freezing') }}
-  {{ completed_table('Completed screening slots', completed_screening, 'screening', 'Screening', True) }}
+  <div class="data-stack">
+    <div class="table-tools" data-admin-filter>
+      <label class="table-search"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><input type="search" data-table-search placeholder="Search user, PI, email, sample or status"></label>
+      <select data-origin-filter aria-label="Filter by origin">
+        <option value="">All origins</option>
+        <option value="Internal">Internal / Academic</option>
+        <option value="External">External</option>
+        <option value="Industry">Industrial</option>
+      </select>
+    </div>
+    {{ completed_table('Completed imaging slots', completed_imaging, 'imaging', 'Data Collection', True) }}
+    {{ completed_table('Completed freezing slots', completed_freezing, 'freezing', 'Freezing') }}
+    {{ completed_table('Completed screening slots', completed_screening, 'screening', 'Screening', True) }}
+  </div>
   <div class="page-actions"><a href="{{ url_for('admin.panel') }}" class="button secondary">← Back to dashboard</a></div>
 </section></main>
 {% endblock %}

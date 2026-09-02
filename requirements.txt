@@ -5,3 +5,4 @@ pymysql==1.1.0
 cryptography==42.0.8
 gunicorn==22.0.0
 reportlab==4.2.2
+python-dotenv==1.0.1
